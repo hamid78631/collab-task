@@ -21,6 +21,6 @@ public class TaskColumn {
     @JoinColumn(name = "board_id" , nullable = false)
     private Board board ;
 
-    @OneToMany(mappedBy = "taskColumn")
+    @OneToMany(mappedBy = "taskColumn", cascade = CascadeType.REMOVE)
     private List<Task> tasks ;
 }

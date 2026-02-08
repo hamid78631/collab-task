@@ -4,7 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a5b58135-9012-49d1-80d2-5eec9b42ad04" name="Changes" comment="" />
+    <list default="true" id="a5b58135-9012-49d1-80d2-5eec9b42ad04" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/dtos/UserDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/exceptions/UserNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/mappers/UserMappers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/collab/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/CollabApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/CollabApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Task.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/TaskColumn.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/TaskColumn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Workspace.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Workspace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/repositories/UserRepository.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,32 +32,48 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="39LNYHb1ShWRx2bl6J6izzQaLE8" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.CollabApplication.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/DELL/IdeaProjects/collab-task/collab_backend",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CollabApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DELL/IdeaProjects/collab-task/collab_backend&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.collab.dtos" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

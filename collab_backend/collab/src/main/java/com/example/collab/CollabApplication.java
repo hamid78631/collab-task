@@ -26,7 +26,6 @@ public class CollabApplication {
                            CommentRepository commentRepository) {
 
         return args -> {
-
             Stream.of("hassan", "hamid", "youssef").forEach(name -> {
                 User user = new User();
                 user.setName(name);
@@ -38,7 +37,7 @@ public class CollabApplication {
 
 
             userRepository.findAll().forEach(user -> {
-                // Création du Workspace
+
                 Workspace workspace = new Workspace();
                 workspace.setName("Workspace de " + user.getName());
                 workspace.setSlug("slug-" + user.getName());
@@ -46,21 +45,20 @@ public class CollabApplication {
                 workspace.setDescription("desc");
                 workspaceRepository.save(workspace);
 
-                // Création du Board
                 Board board = new Board();
                 board.setTitle("Projet PFE");
                 board.setBackgroundColor("green");
                 board.setWorkspace(workspace);
                 boardRepository.save(board);
 
-                // Création de la Column
+
                 TaskColumn column = new TaskColumn();
                 column.setName("To Do");
                 column.setBoard(board);
                 column.setPosition(1);
                 taskColumnRepository.save(column);
 
-                // Création de la Task (Nécessaire pour le commentaire !)
+
                 Task task = new Task();
                 task.setTitle("Finir le backend");
                 task.setDescription("description de la tâche");
@@ -69,7 +67,6 @@ public class CollabApplication {
                 task.setAssignee(user);
                 task.setPosition(1);
                 taskRepository.save(task);
-
 
                 Comment comment = new Comment();
                 comment.setAuthor(user);

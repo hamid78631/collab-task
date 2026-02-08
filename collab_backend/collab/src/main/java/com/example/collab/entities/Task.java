@@ -36,7 +36,7 @@ public class Task {
     @JoinColumn(name = "taskColumn_id" , nullable = false)
     private TaskColumn taskColumn ;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task",cascade = CascadeType.REMOVE)
     private List<Comment> comments ;
 
     @ManyToOne

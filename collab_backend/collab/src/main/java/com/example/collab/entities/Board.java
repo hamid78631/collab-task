@@ -23,6 +23,6 @@ public class Board {
     @JoinColumn(name = "workspace_id" , nullable = false)
     private Workspace workspace ;
 
-    @OneToMany(mappedBy ="board")
+    @OneToMany(mappedBy ="board", cascade = CascadeType.REMOVE)
     private List<TaskColumn> taskColumns ;
 }

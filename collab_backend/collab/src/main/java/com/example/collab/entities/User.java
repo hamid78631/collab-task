@@ -22,20 +22,21 @@ public class User {
     private Long id ;
     private String name ;
     @Email
-    //@Column(unique = true)
+    //@Column(unique = true , nullable = false)
     private String email ;
-    //@Column(unique = true)
+    //@Column(unique = true , nullable = false)
+
     private String password ;
     private String avatarUrl ;
     @CreationTimestamp
     private LocalDateTime createdAt ;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner",cascade = CascadeType.REMOVE)
     private List<Workspace> workspaces ;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author" ,cascade = CascadeType.REMOVE)
     private List<Comment> comments ;
 
-    @OneToMany(mappedBy = "assignee")
+    @OneToMany(mappedBy = "assignee",cascade = CascadeType.REMOVE)
     private List<Task> tasks ;
 }

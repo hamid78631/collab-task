@@ -24,6 +24,6 @@ public class Workspace {
     @JoinColumn(name = "user_id", nullable = false)
     private User owner ;
 
-    @OneToMany(mappedBy = "workspace")
+    @OneToMany(mappedBy = "workspace", cascade = CascadeType.REMOVE)
     private List<Board> boards ;
 }
