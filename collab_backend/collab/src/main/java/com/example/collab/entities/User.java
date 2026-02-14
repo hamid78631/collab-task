@@ -31,6 +31,9 @@ public class User {
     @CreationTimestamp
     private LocalDateTime createdAt ;
 
+    @ManyToMany(mappedBy = "collaborators")
+    private List<Workspace> collaborationWorkspaces;
+
     @OneToMany(mappedBy = "owner",cascade = CascadeType.REMOVE)
     private List<Workspace> workspaces ;
 
