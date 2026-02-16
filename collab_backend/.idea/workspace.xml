@@ -5,26 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5b58135-9012-49d1-80d2-5eec9b42ad04" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/dtos/TaskColumnDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/dtos/TaskDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/exceptions/TaskColumnException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/exceptions/TaskException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/mappers/TaskColumnMappers.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/mappers/TaskMappers.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/TaskColumnService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/TaskColumnServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/TaskService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/TaskServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/TaskColumnController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/TaskController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Task.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Task.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/TaskColumn.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/TaskColumn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/mappers/BoardMappers.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/mappers/BoardMappers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/repositories/TaskRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/repositories/TaskRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/BoardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/BoardService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/BoardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/BoardServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/BoardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/BoardController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
