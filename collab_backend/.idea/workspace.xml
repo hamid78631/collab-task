@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5b58135-9012-49d1-80d2-5eec9b42ad04" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/TaskController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/dtos/CommentDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/mappers/CommentMappers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,6 +57,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.collab.mappers" />
       <recent name="com.example.collab.exceptions" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
