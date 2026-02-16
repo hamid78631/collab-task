@@ -24,6 +24,7 @@ public class Board {
     private Workspace workspace ;
 
     @OneToMany(mappedBy ="board", cascade = CascadeType.REMOVE)
+    @OrderBy("position ASC")
     private List<TaskColumn> taskColumns ;
 
 }

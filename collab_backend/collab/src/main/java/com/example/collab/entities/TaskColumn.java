@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskColumn {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
     private String name ;

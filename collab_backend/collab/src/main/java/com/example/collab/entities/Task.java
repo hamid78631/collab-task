@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,15 +20,17 @@ public class Task {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
     private String title ;
+
     @Column(columnDefinition = "TEXT")
     private String description ;
 
     @Enumerated(EnumType.STRING)
     private EnumPriority priority ;
     private Integer position ;
+
     @CreationTimestamp
     private LocalDateTime createdAt ;
-    @CreationTimestamp
+
     private LocalDateTime dueDate ;
 
     @ManyToOne

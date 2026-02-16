@@ -45,7 +45,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardDTO updateBoard(Long id, BoardDTO boardDTO) throws BoardException {
-        Board board =  boardRepository.findById(boardDTO.getId()).orElseThrow(() -> new BoardException("Board not found"));
+        Board board =  boardRepository.findById(id).orElseThrow(() -> new BoardException("Board not found"));
 
         board.setTitle(boardDTO.getTitle());
         board.setBackgroundColor(boardDTO.getBackgroundColor());

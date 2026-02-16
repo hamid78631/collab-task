@@ -32,9 +32,9 @@ public class BoardController {
         return boardService.createBoard(boardDTO);
     }
 
-    @PutMapping("/board")
-    public BoardDTO updateBoard(@RequestBody BoardDTO boardDTO) throws BoardException {
-        return boardService.updateBoard(boardDTO.getId(), boardDTO);
+    @PutMapping("/board/{id}")
+    public BoardDTO updateBoard(@PathVariable Long id , @RequestBody BoardDTO boardDTO) throws BoardException {
+        return boardService.updateBoard(id, boardDTO);
     }
 
     @DeleteMapping("/board/{id}")
@@ -42,10 +42,10 @@ public class BoardController {
         boardService.deleteBoard(id);
     }
 
-    @GetMapping("/allBoards/{id}")
-    public List<BoardDTO> getBoards(@PathVariable Long id ) throws WorkspaceException, BoardException {
+    @GetMapping("/allBoards/{WorkspaceId}")
+    public List<BoardDTO> getBoards(@PathVariable Long WorkspaceId ) throws WorkspaceException, BoardException {
 
-        return boardService.getBoards(id);
+        return boardService.getBoards(WorkspaceId);
     }
 
     @PutMapping("/board/toggleFavorite/{id}")
