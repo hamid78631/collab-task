@@ -22,7 +22,6 @@ public class CommentDTO {
     private LocalDateTime createdAt ;
 
     private Long taskId ;
-
     //user
     private Long authorId ;
 
