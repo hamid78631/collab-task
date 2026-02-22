@@ -13,6 +13,7 @@ import com.example.collab.repositories.TaskRepository;
 import com.example.collab.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,19 +67,27 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public CommentDTO getComment(Long id) {
+    public CommentDTO getComment(Long id) throws UserNotFoundException, TaskException, CommentException {
+        Comment comment = commentRepository.findById(id).orElseThrow(()-> new CommentException("Comment not found !"));
 
-        return null;
+        return dtoMapper.commentToCommentDTO(comment);
     }
 
+    @SneakyThrows
     @Override
-    public List<CommentDTO> getCommentByUser(Long userId) {
+    public List<CommentDTO> getCommentByUser(Long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User Not found !"));
 
-        return List.of();
+        List<Comment> comments = user.getComments();
+        return comments.stream().map( dtoMapper::commentToCommentDTO).toList();
     }
 
+    @SneakyThrows
     @Override
-    public List<CommentDTO> getCommentsByTask(Long taskId) {
-        return List.of();
+    public List<CommentDTO> getCommentsByTask(Long taskId) throws UserNotFoundException {
+        Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskException("Task not found !"));
+
+        List<Comment> comments = task.getComments();
+        return comments.stream().map( dtoMapper::commentToCommentDTO).toList();
     }
 }

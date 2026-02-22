@@ -24,7 +24,7 @@ public class CommentMappers {
         commentDTO.setAuthorId(author.getId());
 
         Task task = taskRepository.findById(comment.getTask().getId()).orElseThrow(()->new TaskException("Task not found !"));
-
+       // CommentDTO.setTaskId(task.getId());
         return commentDTO ;
     }
 

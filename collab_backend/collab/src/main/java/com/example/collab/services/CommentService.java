@@ -15,9 +15,9 @@ public interface CommentService {
 
     CommentDTO deleteComment(Long id ) throws CommentException, UserNotFoundException, TaskException;
 
-    CommentDTO getComment(Long id);
+    CommentDTO getComment(Long id) throws UserNotFoundException, TaskException, CommentException;
 
-    List<CommentDTO> getCommentByUser(Long userId );
+    List<CommentDTO> getCommentByUser(Long userId ) throws UserNotFoundException;
 
-    List<CommentDTO> getCommentsByTask(Long taskId);
+    List<CommentDTO> getCommentsByTask(Long taskId) throws UserNotFoundException;
 }
