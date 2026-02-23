@@ -8,10 +8,13 @@ import com.example.collab.exceptions.TaskException;
 import com.example.collab.exceptions.UserNotFoundException;
 import com.example.collab.repositories.TaskRepository;
 import com.example.collab.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class CommentMappers {
 
     private UserRepository userRepository;
