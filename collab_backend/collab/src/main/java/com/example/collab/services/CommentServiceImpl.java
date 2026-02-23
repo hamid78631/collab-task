@@ -79,7 +79,15 @@ public class CommentServiceImpl implements CommentService{
         User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User Not found !"));
 
         List<Comment> comments = user.getComments();
-        return comments.stream().map( dtoMapper::commentToCommentDTO).toList();
+        return comments.stream().map( comment -> {
+            try {
+                return dtoMapper.commentToCommentDTO(comment);
+            } catch (TaskException e) {
+                throw new RuntimeException(e);
+            } catch (UserNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
     }
 
     @SneakyThrows
@@ -88,6 +96,14 @@ public class CommentServiceImpl implements CommentService{
         Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskException("Task not found !"));
 
         List<Comment> comments = task.getComments();
-        return comments.stream().map( dtoMapper::commentToCommentDTO).toList();
+        return comments.stream().map(comment-> {
+            try {
+                return dtoMapper.commentToCommentDTO(comment);
+            } catch (TaskException e) {
+                throw new RuntimeException(e);
+            } catch (UserNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
     }
 }
