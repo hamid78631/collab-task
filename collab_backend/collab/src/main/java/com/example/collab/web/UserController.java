@@ -24,7 +24,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public UserDTO getUser(@PathVariable Long id) throws UserNotFoundException {
         return userService.getUser(id);
     }
@@ -40,13 +40,13 @@ public class UserController {
         return userService.saveUser(userDTO);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/user/{id}")
 
     public UserDTO updateUser(@PathVariable Long id , @RequestBody UserDTO userDTO) throws UserNotFoundException {
         return userService.updateUser(id , userDTO);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/user/{id}")
     public void deleteUser(@PathVariable Long id) throws UserNotFoundException {
          userService.deleteUser(id);
     }
