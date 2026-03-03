@@ -1,3 +1,7 @@
 export interface CommentDTO {
-  id
+  id?: number;
+  content: string;
+  taskId: number;
+  createdAt?: string; 
+  authorId: number;
   }
