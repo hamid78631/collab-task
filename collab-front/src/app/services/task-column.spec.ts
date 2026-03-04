@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TaskColumn } from './task-column';
+import { TaskColumnService } from './task-column';
 
 describe('TaskColumn', () => {
-  let service: TaskColumn;
+  let service: TaskColumnService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(TaskColumn);
+    service = TestBed.inject(TaskColumnService);
   });
 
   it('should be created', () => {
