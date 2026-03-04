@@ -1,0 +1,39 @@
+<div class="dashboard-wrapper">
+  <header class="stats-bar">
+    <div class="stat-card">
+      <span class="stat-value">{{ boards.length }}</span>
+      <span class="stat-label">Boards Actifs</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">12</span>
+      <span class="stat-label">Tâches en retard</span>
+    </div>
+  </header>
+
+  <section class="main-content">
+    <div class="controls">
+      <input type="text" placeholder="Rechercher un board..." [(ngModel)]="searchTerm">
+      <select (change)="sortBoards($event)">
+        <option value="name">Nom</option>
+        <option value="date">Date de création</option>
+      </select>
+    </div>
+
+    <div class="boards-grid">
+      <div *ngFor="let board of boards | filter: searchTerm" class="board-card" [ngClass]="{'favorite': board.isFavorite}">
+        <div class="card-header">
+          <h3>{{ board.name }}</h3>
+          <button (click)="toggleFavorite(board.id)">⭐</button>
+        </div>
+        <div class="card-body">
+          <p>{{ board.description }}</p>
+          <div class="progress-bar"><div [style.width]="board.progress + '%'"></div></div>
+        </div>
+        <div class="card-footer">
+          <span class="member-count">{{ board.memberCount }} Membres</span>
+          <button class="btn-primary" [routerLink]="['/board', board.id]">Ouvrir</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
