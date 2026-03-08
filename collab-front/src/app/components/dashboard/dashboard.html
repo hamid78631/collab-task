@@ -1,39 +1,283 @@
-<div class="dashboard-wrapper">
-  <header class="stats-bar">
-    <div class="stat-card">
-      <span class="stat-value">{{ boards.length }}</span>
-      <span class="stat-label">Boards Actifs</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-value">12</span>
-      <span class="stat-label">Tâches en retard</span>
-    </div>
-  </header>
+<div class="app">
 
-  <section class="main-content">
-    <div class="controls">
-      <input type="text" placeholder="Rechercher un board..." [(ngModel)]="searchTerm">
-      <select (change)="sortBoards($event)">
-        <option value="name">Nom</option>
-        <option value="date">Date de création</option>
-      </select>
+  <!-- ════════ SIDEBAR ════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+      </div>
+      <span class="logo-text">Flow<em>Board</em></span>
     </div>
 
-    <div class="boards-grid">
-      <div *ngFor="let board of boards | filter: searchTerm" class="board-card" [ngClass]="{'favorite': board.isFavorite}">
-        <div class="card-header">
-          <h3>{{ board.name }}</h3>
-          <button (click)="toggleFavorite(board.id)">⭐</button>
+    <div class="sidebar-section">
+      <div class="s-label">Principal</div>
+      <nav class="nav">
+        <a class="nav-item active" routerLink="/dashboard" routerLinkActive="active">
+          <svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" routerLink="/boards" routerLinkActive="active">
+          <svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>
+          Mes Boards
+          <span class="nbadge info">{{ totalBoards }}</span>
+        </a>
+        <a class="nav-item" routerLink="/tasks" routerLinkActive="active">
+          <svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Mes Tâches
+          <span class="nbadge">{{ lateTasks }}</span>
+        </a>
+        <a class="nav-item" routerLink="/calendar" routerLinkActive="active">
+          <svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Calendrier
+        </a>
+        <a class="nav-item" routerLink="/reports" routerLinkActive="active">
+          <svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Rapports
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="s-label">Workspace</div>
+      <nav class="nav">
+        <a class="nav-item" routerLink="/teams" routerLinkActive="active">
+          <svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Équipes
+        </a>
+        <a class="nav-item" routerLink="/notifications" routerLinkActive="active">
+          <svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          Notifications
+          <span class="nbadge">3</span>
+        </a>
+        <a class="nav-item" routerLink="/settings" routerLinkActive="active">
+          <svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 014.93 19.07M4.93 4.93A10 10 0 0119.07 19.07"/></svg>
+          Paramètres
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="user-row">
+        <div class="uava">AK</div>
+        <div>
+          <div class="uname">Ahmed K.</div>
+          <div class="urole">Admin · Pro</div>
         </div>
-        <div class="card-body">
-          <p>{{ board.description }}</p>
-          <div class="progress-bar"><div [style.width]="board.progress + '%'"></div></div>
-        </div>
-        <div class="card-footer">
-          <span class="member-count">{{ board.memberCount }} Membres</span>
-          <button class="btn-primary" [routerLink]="['/board', board.id]">Ouvrir</button>
-        </div>
+        <svg style="margin-left:auto;color:rgba(255,255,255,0.28);flex-shrink:0" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </div>
-  </section>
+  </aside>
+
+  <!-- ════════ MAIN ════════ -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <span class="tb-title">Dashboard</span>
+      <div class="tb-sep"></div>
+      <span class="tb-date">{{ today | date:'EEEE d MMMM yyyy' : '' : 'fr' }}</span>
+      <div class="tb-right">
+        <div class="search" [class.focused]="searchFocused">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="color:var(--text-3);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input
+            type="text"
+            placeholder="Rechercher..."
+            [(ngModel)]="searchTerm"
+            (focus)="searchFocused = true"
+            (blur)="searchFocused = false"
+          />
+        </div>
+        <select class="sort-sel" [(ngModel)]="sortBy">
+          <option value="name">Nom A–Z</option>
+          <option value="progress">Avancement</option>
+          <option value="members">Membres</option>
+        </select>
+        <div class="ico-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div class="ndot"></div>
+        </div>
+        <button class="btn-new" (click)="openModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouveau Board
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- STATS -->
+      <div class="stats">
+        <div class="scard">
+          <div class="scard-top">
+            <div class="sico si-b">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </div>
+            <span class="trend t-up">↑ +2 cette semaine</span>
+          </div>
+          <div class="sval">{{ totalBoards }}</div>
+          <div class="slabel">Boards actifs</div>
+        </div>
+
+        <div class="scard">
+          <div class="scard-top">
+            <div class="sico si-g">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            </div>
+            <span class="trend t-up">↑ 18% vs hier</span>
+          </div>
+          <div class="sval">{{ completedTasks }}</div>
+          <div class="slabel">Tâches complétées</div>
+        </div>
+
+        <div class="scard">
+          <div class="scard-top">
+            <div class="sico si-r">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <span class="trend t-down">↑ +3 nouvelles</span>
+          </div>
+          <div class="sval">{{ lateTasks }}</div>
+          <div class="slabel">Tâches en retard</div>
+        </div>
+
+        <div class="scard">
+          <div class="scard-top">
+            <div class="sico si-n">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <span class="trend t-up">↑ 5 ce mois</span>
+          </div>
+          <div class="sval">{{ activeMembers }}</div>
+          <div class="slabel">Membres actifs</div>
+        </div>
+      </div>
+
+      <!-- ALERT -->
+      @if (lateTasks > 0) {
+      <div class="alert">
+        <svg class="alert-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <div class="alert-title">{{ lateTasks }} tâches dépassent leur deadline</div>
+          <div class="alert-sub">Principalement dans "App Mobile v2" et "Backend API Gateway"</div>
+        </div>
+        <button class="alert-cta" routerLink="/tasks">Voir les retards →</button>
+      </div>
+      }
+
+      <!-- SECTION HEADER -->
+      <div class="sec-hd">
+        <div class="sec-title">
+          Mes Boards
+          <span class="sec-pill">{{ filteredBoards().length }}</span>
+        </div>
+        <div class="sec-actions">
+          <div class="vtoggle">
+            <button class="vb" [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </button>
+            <button class="vb" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOARDS GRID -->
+      <div class="grid" [class.list-view]="viewMode === 'list'">
+
+        @for (board of filteredBoards(); track board.id) {
+        <div class="bcard" [class.fav]="board.isFavorite">
+          <div class="stripe" [ngClass]="'s' + ((board.id - 1) % 6 + 1)"></div>
+          <div class="binner">
+            <div class="bhead">
+              <div class="bico" [innerHTML]="getIcon(board.id)"></div>
+              <div class="bmeta">
+                <div class="bname">{{ board.name }}</div>
+                <div class="bdesc">{{ board.description }}</div>
+              </div>
+              <button class="fstar" (click)="toggleFav(board.id)">
+                <svg width="12" height="12" viewBox="0 0 24 24"
+                     [attr.fill]="board.isFavorite ? '#f59e0b' : 'none'"
+                     [attr.stroke]="board.isFavorite ? '#f59e0b' : 'currentColor'"
+                     stroke-width="2" stroke-linecap="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="btags">
+              @for (tag of board.tags; track tag) {
+              <span class="btag">{{ tag }}</span>
+              }
+            </div>
+
+            <div>
+              <div class="phd">
+                <span class="plabel">Avancement</span>
+                <span class="ppct">{{ board.progress }}%</span>
+              </div>
+              <div class="ptrack">
+                <div class="pfill" [style.width.%]="board.progress"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bfoot">
+            <div class="members-left">
+              <div class="avas">
+                @for (member of board.members.slice(0, 4); track member.initials) {
+                <div class="ava" [ngClass]="'a' + ($index + 1)">{{ member.initials }}</div>
+                }
+              </div>
+              <span class="memtxt">{{ board.members.length }} membres</span>
+            </div>
+            <button class="obtn" [routerLink]="['/board', board.id]">
+              Ouvrir
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </div>
+        }
+
+        <!-- ADD CARD -->
+        <div class="addcard" (click)="openModal()">
+          <div class="addcircle">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <div class="addlbl">Créer un board</div>
+          <div class="addsub">Nouveau projet ou équipe</div>
+        </div>
+
+      </div>
+    </div>
+  </main>
 </div>
+
+<!-- ════════ MODAL ════════ -->
+@if (showModal) {
+<div class="mbackdrop" (click)="onBackdropClick($event)">
+  <div class="mbox">
+    <div class="mhd">
+      <span class="mtitle">Nouveau Board</span>
+      <button class="xcbtn" (click)="closeModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field">
+      <label>Nom du board *</label>
+      <input type="text" placeholder="ex : Sprint Q2 2026" [(ngModel)]="newBoard.name" [class.error]="nameError" (input)="nameError = false" />
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea rows="3" placeholder="Objectif de ce board..." [(ngModel)]="newBoard.description"></textarea>
+    </div>
+    <div class="mactions">
+      <button class="bcancl" (click)="closeModal()">Annuler</button>
+      <button class="bsubmt" (click)="createBoard()">Créer le Board</button>
+    </div>
+  </div>
+</div>
+}
