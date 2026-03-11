@@ -12,12 +12,10 @@ export class TaskService {
 
   constructor(private httpClient: HttpClient) {}
 
-  // Créer une nouvelle tâche
   createTask(task: TaskDTO): Observable<TaskDTO> {
     return this.httpClient.post<TaskDTO>(`${this.apiUrl}/task`, task);
   }
 
-  // Modifier une tâche
   updateTask(taskId: number, task: TaskDTO): Observable<TaskDTO> {
     return this.httpClient.put<TaskDTO>(`${this.apiUrl}/task/${taskId}`, task);
   }
