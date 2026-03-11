@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -64,11 +65,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDTO searchUser(String email, String name) throws UserNotFoundException {
-         User user = userRepository.findByEmailOrName(email, name)
-                .orElseThrow(() -> new UserNotFoundException("User not found "));
-         return dtoMapper.userToUserDTO(user);
+    public List<UserDTO> searchUser(String email, String name) throws UserNotFoundException {
+         List<User> users = Collections.singletonList(userRepository.findByEmailOrName(email, name)
+                 .orElseThrow(() -> new UserNotFoundException("User not found ")));
+
+
+         return users.stream().map(
+                 user -> dtoMapper.userToUserDTO(user))
+                         .toList();
     }
+
 
     @Override
     public List<UserDTO> getAllUsers() {

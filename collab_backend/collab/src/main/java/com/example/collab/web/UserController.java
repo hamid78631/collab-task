@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/users/search")
-    public UserDTO searchUser(@RequestParam(name = "email", required = false) String email,
+    public List<UserDTO> searchUser(@RequestParam(name = "email", required = false) String email,
                               @RequestParam(name = "name", required = false) String name) throws UserNotFoundException {
         return userService.searchUser(email, name);
     }

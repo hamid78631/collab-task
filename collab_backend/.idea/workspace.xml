@@ -5,14 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5b58135-9012-49d1-80d2-5eec9b42ad04" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../collab-front/src/app/models/board.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/models/board.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/models/taskColumn.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/models/taskColumn.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/models/workspace.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/models/workspace.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/board.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/board.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/comment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/comment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/task.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/task.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/task.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/user.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/user.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/environments/environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,29 +54,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.CollabApplication.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.CollabApplication.executor": "Run",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/DELL/IdeaProjects/collab-task/collab_backend",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CollabApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.CollabApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DELL/IdeaProjects/collab-task/collab_backend&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.collab.exceptions" />

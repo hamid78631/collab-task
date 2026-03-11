@@ -14,7 +14,7 @@ public interface UserService {
 
     UserDTO updateUser(Long id, UserDTO userDetails) throws UserNotFoundException;
     UserDTO deleteUser(Long id) throws UserNotFoundException;
-    UserDTO searchUser(String email , String name) throws UserNotFoundException;
+    List<UserDTO> searchUser(String email , String name) throws UserNotFoundException;
 
     List<UserDTO> getAllUsers();
 }
