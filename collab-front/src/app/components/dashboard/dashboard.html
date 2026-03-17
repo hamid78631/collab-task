@@ -88,9 +88,7 @@
           />
         </div>
         <select class="sort-sel" [(ngModel)]="sortBy">
-          <option value="name">Nom A–Z</option>
-          <option value="progress">Avancement</option>
-          <option value="members">Membres</option>
+          <option value="title">Nom A–Z</option>
         </select>
         <div class="ico-btn">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
@@ -182,14 +180,16 @@
       <div class="grid" [class.list-view]="viewMode === 'list'">
 
         @for (board of filteredBoards(); track board.id) {
-        <div class="bcard" [class.fav]="board.isFavorite">
-          <div class="stripe" [ngClass]="'s' + ((board.id - 1) % 6 + 1)"></div>
+        <div class="bcard" [class.fav]="board.isFavorite"
+             [style.--board-color]="board.backgroundColor || '#6366f1'">
+          <div class="stripe" [style.background]="board.backgroundColor || null"
+               [ngClass]="board.backgroundColor ? '' : 's' + ((board.id - 1) % 6 + 1)"></div>
           <div class="binner">
             <div class="bhead">
               <div class="bico" [innerHTML]="getIcon(board.id)"></div>
               <div class="bmeta">
-                <div class="bname">{{ board.name }}</div>
-                <div class="bdesc">{{ board.description }}</div>
+                <!-- ✅ board.title (pas board.name) -->
+                <div class="bname">{{ board.title }}</div>
               </div>
               <button class="fstar" (click)="toggleFav(board.id)">
                 <svg width="12" height="12" viewBox="0 0 24 24"
@@ -200,37 +200,29 @@
                 </svg>
               </button>
             </div>
-
-            <div class="btags">
-              @for (tag of (board.tags || []); track tag) {
-              <span class="btag">{{ tag }}</span>
-              }
-            </div>
-
-            <div>
-              <div class="phd">
-                <span class="plabel">Avancement</span>
-                <span class="ppct">{{ board.progress }}%</span>
-              </div>
-              <div class="ptrack">
-                <div class="pfill" [style.width.%]="board.progress"></div>
-              </div>
-            </div>
           </div>
 
           <div class="bfoot">
-            <div class="members-left">
-              <div class="avas">
-                @for (member of (board.members || []).slice(0, 4); track member.initials) {
-                <div class="ava" [ngClass]="'a' + ($index + 1)">{{ member.initials }}</div>
-                }
-              </div>
-              <span class="memtxt">{{ (board.members || []).length }} membres</span>
+            <div class="bactions">
+              <button class="act-btn edit-btn" (click)="openEditModal(board)" title="Modifier">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button class="act-btn del-btn" (click)="openDeleteConfirm(board.id)" title="Supprimer">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                  <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+                </svg>
+              </button>
+              <button class="obtn" [routerLink]="['/board', board.id]">
+                Ouvrir
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </button>
             </div>
-            <button class="obtn" [routerLink]="['/board', board.id]">
-              Ouvrir
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </button>
           </div>
         </div>
         }
@@ -248,6 +240,7 @@
   </main>
 </div>
 
+<!-- ─── MODALE CRÉATION ──────────────────────────────────────────────────── -->
 @if (showModal) {
 <div class="mbackdrop" (click)="onBackdropClick($event)">
   <div class="mbox">
@@ -259,15 +252,92 @@
     </div>
     <div class="field">
       <label>Nom du board *</label>
-      <input type="text" placeholder="ex : Sprint Q2 2026" [(ngModel)]="newBoard.name" [class.error]="nameError" (input)="nameError = false" />
+      <!-- ✅ newBoard.title (pas newBoard.name) -->
+      <input type="text" placeholder="ex : Sprint Q2 2026"
+             [(ngModel)]="newBoard.title"
+             [class.error]="nameError"
+             (input)="nameError = false" />
     </div>
     <div class="field">
-      <label>Description</label>
-      <textarea rows="3" placeholder="Objectif de ce board..." [(ngModel)]="newBoard.description"></textarea>
+      <label>Couleur</label>
+      <div class="color-row">
+        @for (c of ['#6366f1','#8b5cf6','#ec4899','#f59e0b','#10b981','#3b82f6']; track c) {
+        <button
+          class="color-dot"
+          [style.background]="c"
+          [class.selected]="newBoard.backgroundColor === c"
+          (click)="newBoard.backgroundColor = c">
+        </button>
+        }
+      </div>
     </div>
     <div class="mactions">
       <button class="bcancl" (click)="closeModal()">Annuler</button>
       <button class="bsubmt" (click)="createBoard()">Créer le Board</button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- ─── MODALE ÉDITION ───────────────────────────────────────────────────── -->
+@if (showEditModal) {
+<div class="mbackdrop-edit" (click)="onBackdropClick($event)">
+  <div class="mbox">
+    <div class="mhd">
+      <span class="mtitle">Modifier le Board</span>
+      <button class="xcbtn" (click)="closeEditModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="field">
+      <label>Nom du board *</label>
+      <!-- ✅ editBoard.title (pas editBoard.name) -->
+      <input type="text" placeholder="Nom du board"
+             [(ngModel)]="editBoard.title"
+             [class.error]="editNameError"
+             (input)="editNameError = false" />
+    </div>
+    <div class="field">
+      <label>Couleur</label>
+      <div class="color-row">
+        @for (c of ['#6366f1','#8b5cf6','#ec4899','#f59e0b','#10b981','#3b82f6']; track c) {
+        <button
+          class="color-dot"
+          [style.background]="c"
+          [class.selected]="editBoard.backgroundColor === c"
+          (click)="editBoard.backgroundColor = c">
+        </button>
+        }
+      </div>
+    </div>
+    <div class="mactions">
+      <button class="bcancl" (click)="closeEditModal()">Annuler</button>
+      <button class="bsubmt" (click)="saveEditBoard()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- ─── MODALE SUPPRESSION ──────────────────────────────────────────────── -->
+@if (showDeleteConfirm) {
+<div class="mbackdrop-delete" (click)="onBackdropClick($event)">
+  <div class="mbox mbox-sm">
+    <div class="mhd">
+      <span class="mtitle">Supprimer le Board</span>
+      <button class="xcbtn" (click)="closeDeleteConfirm()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <p class="del-msg">
+      Cette action est <strong>irréversible</strong>. Le board et toutes ses tâches seront définitivement supprimés.
+    </p>
+    <div class="mactions">
+      <button class="bcancl" (click)="closeDeleteConfirm()">Annuler</button>
+      <button class="bdanger" (click)="confirmDelete()">Supprimer</button>
     </div>
   </div>
 </div>

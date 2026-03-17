@@ -1,9 +1,6 @@
-
-
 export interface TaskColumnDTO {
   id: number;
-  title: string;
+  name: string;
   position: number;
   boardId: number;
-
 }

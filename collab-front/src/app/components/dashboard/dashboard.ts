@@ -19,21 +19,22 @@ export class Dashboard implements OnInit {
   private sanitizer = inject(DomSanitizer);
 
   private boardsSignal = signal<BoardDTO[]>([]);
+
+
   searchTerm = '';
-  sortBy = 'name';
+  sortBy = 'title';
   viewMode: 'grid' | 'list' = 'grid';
   showModal = false;
-  showEditModal = false;       // ← modale d'édition
-  showDeleteConfirm = false;   // ← modale de confirmation suppression
+  showEditModal = false;
+  showDeleteConfirm = false;
   searchFocused = false;
 
   today = new Date();
-  newBoard = { name: '', description: '' };
+  newBoard = { title: '', backgroundColor: '' };
   nameError = false;
 
-  // Board sélectionné pour édition ou suppression
   selectedBoard: BoardDTO | null = null;
-  editBoard = { name: '', description: '', color: '' };
+  editBoard = { title: '', backgroundColor: '' };
   editNameError = false;
   boardToDeleteId: number | null = null;
 
@@ -42,16 +43,17 @@ export class Dashboard implements OnInit {
   lateTasks = 12;
   activeMembers = 24;
 
+
   filteredBoards = computed(() => {
     const term = this.searchTerm.toLowerCase();
     let list = this.boardsSignal().filter(b =>
-      b.name.toLowerCase().includes(term) ||
-      (b.description && b.description.toLowerCase().includes(term))
+      b.title.toLowerCase().includes(term)
     );
-    if (this.sortBy === 'name') list = [...list].sort((a, b) => a.name.localeCompare(b.name));
-    if (this.sortBy === 'progress') list = [...list].sort((a, b) => (b.progress || 0) - (a.progress || 0));
+    if (this.sortBy === 'title') list = [...list].sort((a, b) => a.title.localeCompare(b.title));
     return list;
   });
+
+
 
   ngOnInit(): void {
     this.boardService.getBoardsByWorkspaceId(1).subscribe({
@@ -80,22 +82,20 @@ export class Dashboard implements OnInit {
   }
 
   createBoard(): void {
-    if (!this.newBoard.name.trim()) { this.nameError = true; return; }
+    if (!this.newBoard.title.trim()) { this.nameError = true; return; }
     const dto: BoardDTO = {
       id: 0,
-      name: this.newBoard.name,
-      description: this.newBoard.description,
+      title: this.newBoard.title,
+      backgroundColor: this.newBoard.backgroundColor,
       isFavorite: false,
-      workspaceId: 1,
-      progress: 0,
-      tags: [],
-      members: []
+      workspaceId: 1
     };
     this.boardService.createBoard(dto).subscribe({
       next: (createdBoard) => {
         this.boardsSignal.update(boards => [...boards, createdBoard]);
         this.closeModal();
-      }
+      },
+      error: (err) => alert('Erreur création board :', err)
     });
   }
 
@@ -103,11 +103,9 @@ export class Dashboard implements OnInit {
 
   openEditModal(board: BoardDTO): void {
     this.selectedBoard = board;
-    // Pré-remplissage du formulaire avec les valeurs actuelles du board
     this.editBoard = {
-      name: board.name,
-      description: board.description || '',
-      color: board.color || ''
+      title: board.title,
+      backgroundColor: board.backgroundColor || ''
     };
     this.editNameError = false;
     this.showEditModal = true;
@@ -116,23 +114,21 @@ export class Dashboard implements OnInit {
   closeEditModal(): void {
     this.showEditModal = false;
     this.selectedBoard = null;
-    this.editBoard = { name: '', description: '', color: '' };
+    this.editBoard = { title: '', backgroundColor: '' };
   }
 
   saveEditBoard(): void {
-    if (!this.editBoard.name.trim()) { this.editNameError = true; return; }
+    if (!this.editBoard.title.trim()) { this.editNameError = true; return; }
     if (!this.selectedBoard) return;
 
     const updatedDto: BoardDTO = {
       ...this.selectedBoard,
-      name: this.editBoard.name,
-      description: this.editBoard.description,
-      color: this.editBoard.color
+      title: this.editBoard.title,
+      backgroundColor: this.editBoard.backgroundColor
     };
 
     this.boardService.updateBoard(this.selectedBoard.id, updatedDto).subscribe({
       next: (updated) => {
-        // Remplacement du board modifié dans le signal
         this.boardsSignal.update(boards =>
           boards.map(b => b.id === updated.id ? updated : b)
         );
@@ -142,12 +138,10 @@ export class Dashboard implements OnInit {
     });
   }
 
-  // ─── COULEUR ───────────────────────────────────────────────────────────────
 
   updateColor(boardId: number, color: string): void {
     this.boardService.updateBoardColor(boardId, color).subscribe({
       next: (updated) => {
-        // Mise à jour uniquement de la couleur dans le signal
         this.boardsSignal.update(boards =>
           boards.map(b => b.id === boardId ? updated : b)
         );
@@ -171,10 +165,8 @@ export class Dashboard implements OnInit {
   confirmDelete(): void {
     if (this.boardToDeleteId === null) return;
     const id = this.boardToDeleteId;
-
     this.boardService.deleteBoard(id).subscribe({
       next: () => {
-        // Retrait du board supprimé du signal sans rechargement
         this.boardsSignal.update(boards => boards.filter(b => b.id !== id));
         this.closeDeleteConfirm();
       },
@@ -182,13 +174,13 @@ export class Dashboard implements OnInit {
     });
   }
 
-  // ─── MODALES CRÉATION ──────────────────────────────────────────────────────
+  // ─── MODALES ───────────────────────────────────────────────────────────────
 
   openModal(): void { this.showModal = true; }
 
   closeModal(): void {
     this.showModal = false;
-    this.newBoard = { name: '', description: '' };
+    this.newBoard = { title: '', backgroundColor: '' };
     this.nameError = false;
   }
 

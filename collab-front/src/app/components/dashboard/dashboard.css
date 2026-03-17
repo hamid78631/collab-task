@@ -1007,3 +1007,33 @@
   .sidebar { display: none; }
   .content { padding: 16px; }
 }
+/* Boutons d'action sur les cartes */
+.bactions { display: flex; align-items: center; gap: 6px; }
+
+.act-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 7px; border: none;
+  cursor: pointer; transition: background 0.15s, color 0.15s;
+  background: transparent; color: var(--text-3);
+}
+.edit-btn:hover { background: rgba(99,102,241,0.12); color: #6366f1; }
+.del-btn:hover  { background: rgba(239,68,68,0.12);  color: #ef4444; }
+
+/* Color picker dans la modale d'édition */
+.color-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.color-dot {
+  width: 26px; height: 26px; border-radius: 50%; border: 2px solid transparent;
+  cursor: pointer; transition: transform 0.15s, border-color 0.15s;
+}
+.color-dot:hover    { transform: scale(1.15); }
+.color-dot.selected { border-color: white; outline: 2px solid var(--accent); }
+
+/* Modale de suppression */
+.mbox-sm { max-width: 400px; }
+.del-msg  { color: var(--text-2); font-size: 13.5px; line-height: 1.6; margin: 4px 0 20px; }
+.bdanger  {
+  padding: 9px 20px; border-radius: 9px; border: none; cursor: pointer;
+  background: #ef4444; color: white; font-weight: 600; font-size: 13px;
+  transition: background 0.15s;
+}
+.bdanger:hover { background: #dc2626; }
