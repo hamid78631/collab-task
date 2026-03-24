@@ -1,0 +1,89 @@
+@if (showModal) {
+<div class="mbackdrop" (click)="onBackdropClick($event, 'create')">
+  <div class="mbox">
+    <div class="mhd">
+      <span class="mtitle">Nouveau Board</span>
+      <button class="xcbtn" (click)="closeModal.emit()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field">
+      <label>Nom du board *</label>
+      <input type="text" placeholder="ex : Sprint Q2 2026"
+             [(ngModel)]="newBoard.title"
+             [class.error]="nameError"
+             (input)="nameErrorChange.emit(false)" />
+    </div>
+    <div class="field">
+      <label>Couleur</label>
+      <div class="color-row">
+        @for (c of colors; track c) {
+        <button class="color-dot" [style.background]="c"
+                [class.selected]="newBoard.backgroundColor === c"
+                (click)="newBoard.backgroundColor = c">
+        </button>
+        }
+      </div>
+    </div>
+    <div class="mactions">
+      <button class="bcancl" (click)="closeModal.emit()">Annuler</button>
+      <button class="bsubmt" (click)="create.emit()">Créer le Board</button>
+    </div>
+  </div>
+</div>
+}
+
+@if (showEditModal) {
+<div class="mbackdrop-edit" (click)="onBackdropClick($event, 'edit')">
+  <div class="mbox">
+    <div class="mhd">
+      <span class="mtitle">Modifier le Board</span>
+      <button class="xcbtn" (click)="closeEdit.emit()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="field">
+      <label>Nom du board *</label>
+      <input type="text" placeholder="Nom du board"
+             [(ngModel)]="editBoard.title"
+             [class.error]="editNameError"
+             (input)="editNameErrorChange.emit(false)" />
+    </div>
+    <div class="field">
+      <label>Couleur</label>
+      <div class="color-row">
+        @for (c of colors; track c) {
+        <button class="color-dot" [style.background]="c"
+                [class.selected]="editBoard.backgroundColor === c"
+                (click)="editBoard.backgroundColor = c">
+        </button>
+        }
+      </div>
+    </div>
+    <div class="mactions">
+      <button class="bcancl" (click)="closeEdit.emit()">Annuler</button>
+      <button class="bsubmt" (click)="saveEdit.emit()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+}
+
+@if (showDeleteConfirm) {
+<div class="mbackdrop-delete" (click)="onBackdropClick($event, 'delete')">
+  <div class="mbox mbox-sm">
+    <div class="mhd">
+      <span class="mtitle">Supprimer le Board</span>
+      <button class="xcbtn" (click)="closeDelete.emit()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <p class="del-msg">
+      Cette action est <strong>irréversible</strong>. Le board et toutes ses tâches seront définitivement supprimés.
+    </p>
+    <div class="mactions">
+      <button class="bcancl" (click)="closeDelete.emit()">Annuler</button>
+      <button class="bdanger" (click)="confirmDelete.emit()">Supprimer</button>
+    </div>
+  </div>
+</div>
+}

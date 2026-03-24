@@ -1,0 +1,49 @@
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 24px;
+}
+
+.bcard {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.bcard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -5px rgba(0,0,0,0.05);
+  border-color: #6366f1;
+}
+
+.pfill {
+  height: 6px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  transition: width 1s ease-in-out;
+}
+
+.mem-group {
+  display: flex;
+  align-items: center;
+}
+
+.m-ava {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: -8px;
+}
+
+.m-ava:first-child { margin-left: 0; }
