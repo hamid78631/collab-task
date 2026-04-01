@@ -3,6 +3,7 @@ package com.example.collab.web;
 
 import com.example.collab.dtos.UserDTO;
 import com.example.collab.entities.User;
+import com.example.collab.exceptions.UserAlreadyExistsException;
 import com.example.collab.exceptions.UserNotFoundException;
 import com.example.collab.services.UserService;
 import jakarta.transaction.Transactional;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public UserDTO createUser(@RequestBody UserDTO userDTO) throws UserNotFoundException {
+    public UserDTO createUser(@RequestBody UserDTO userDTO) throws UserAlreadyExistsException {
         return userService.saveUser(userDTO);
     }
 

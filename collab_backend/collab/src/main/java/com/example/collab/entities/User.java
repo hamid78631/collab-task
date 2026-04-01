@@ -42,4 +42,7 @@ public class User {
 
     @OneToMany(mappedBy = "assignee",cascade = CascadeType.REMOVE)
     private List<Task> tasks ;
+
+    @OneToMany(mappedBy = "ownerNotification")
+    private List<Notification> notifications;
 }

@@ -2,13 +2,14 @@ package com.example.collab.services;
 
 import com.example.collab.dtos.UserDTO;
 import com.example.collab.entities.User;
+import com.example.collab.exceptions.UserAlreadyExistsException;
 import com.example.collab.exceptions.UserNotFoundException;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserDTO saveUser(UserDTO userDTO) throws UserNotFoundException;
+    UserDTO saveUser(UserDTO userDTO) throws UserAlreadyExistsException;
 
     UserDTO getUser(Long id) throws UserNotFoundException;
 

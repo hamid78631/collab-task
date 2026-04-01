@@ -2,6 +2,7 @@ package com.example.collab.services;
 
 import com.example.collab.dtos.UserDTO;
 import com.example.collab.entities.User;
+import com.example.collab.exceptions.UserAlreadyExistsException;
 import com.example.collab.exceptions.UserNotFoundException;
 import com.example.collab.mappers.UserMappers;
 import com.example.collab.repositories.UserRepository;
@@ -21,10 +22,18 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public UserDTO saveUser(UserDTO userDTO) throws UserNotFoundException {
+    public UserDTO saveUser(UserDTO userDTO) throws UserAlreadyExistsException {
+
+        if (userDTO.getEmail() == null || userDTO.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("L'email ne peut pas être vide");
+        }
+        
+        if (userDTO.getName() == null || userDTO.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom ne peut pas être vide");
+        }
 
         if(userRepository.findByEmailOrName(userDTO.getEmail(), userDTO.getName()).isPresent()){
-            throw new UserNotFoundException("Cet email est déja utilisé ! ");
+            throw new UserAlreadyExistsException("Cet email est déjà utilisé !");
         }
         User saveUser = dtoMapper.userDTOToUser(userDTO);
         userRepository.save(saveUser);
@@ -33,13 +42,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDTO getUser(Long id) throws UserNotFoundException {
-        User user = userRepository.findById(id).get();
-        if(user == null){
-            throw new UserNotFoundException("Cet utilisateur n'existe pas ");
-        }else {
-            return dtoMapper.userToUserDTO(user);
-        }
-
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Cet utilisateur n'existe pas"));
+        return dtoMapper.userToUserDTO(user);
     }
 
 
@@ -66,13 +71,25 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<UserDTO> searchUser(String email, String name) throws UserNotFoundException {
-         List<User> users = Collections.singletonList(userRepository.findByEmailOrName(email, name)
-                 .orElseThrow(() -> new UserNotFoundException("User not found ")));
-
-
-         return users.stream().map(
-                 user -> dtoMapper.userToUserDTO(user))
-                         .toList();
+        List<User> users;
+        
+        if (email != null && name != null) {
+            users = userRepository.findByEmailContainingIgnoreCaseOrNameContainingIgnoreCase(email, name);
+        } else if (email != null) {
+            users = userRepository.findByEmailContainingIgnoreCaseOrNameContainingIgnoreCase(email, "");
+        } else if (name != null) {
+            users = userRepository.findByEmailContainingIgnoreCaseOrNameContainingIgnoreCase("", name);
+        } else {
+            throw new UserNotFoundException("Veuillez fournir un email ou un nom pour la recherche");
+        }
+        
+        if (users.isEmpty()) {
+            throw new UserNotFoundException("Aucun utilisateur trouvé pour les critères spécifiés");
+        }
+        
+        return users.stream()
+                .map(user -> dtoMapper.userToUserDTO(user))
+                .toList();
     }
 
 

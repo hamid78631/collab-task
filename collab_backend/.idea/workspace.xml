@@ -5,21 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5b58135-9012-49d1-80d2-5eec9b42ad04" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/dtos/NotificationDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/Notification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/exceptions/NotificationExceptions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/mappers/NotificationMappers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/repositories/NotificationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/NotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/NotificationsServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/NotificationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashboard/dashboard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/models/board.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/models/board.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/board.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/board.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/comment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/comment.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/task.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/task.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/task.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/user.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/user.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/services/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/services/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../collab-front/src/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/environments/environment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/board-grid/board-grid.css" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/board-grid/board-grid.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/board-modals/board-modals.css" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/board-modals/board-modals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/sidebar/sidebar.css" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/sidebar/sidebar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/stats-cards/stats-cards.css" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/stats-cards/stats-cards.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/topbar/topbar.css" beforeDir="false" afterPath="$PROJECT_DIR$/../collab-front/src/app/components/dashcomponents/topbar/topbar.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/CollabApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/CollabApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/repositories/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/services/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/java/com/example/collab/web/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collab/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/collab/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,8 +90,8 @@
       <recent name="com.example.collab.mappers" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.example.collab.dtos" />
       <recent name="com.example.collab.exceptions" />
+      <recent name="com.example.collab.dtos" />
     </key>
   </component>
   <component name="SharedIndexes">
