@@ -13,13 +13,13 @@ public interface TaskService {
 
     TaskDTO getTaskById(Long id) throws TaskException;
 
-    TaskDTO getTaskByTitle(String title);
+    TaskDTO getTaskByTitle(String title) throws TaskException;
 
     TaskDTO updateTask(Long id , TaskDTO taskDTO) throws TaskException;
 
     TaskDTO deleteTask(Long id) throws TaskException;
 
-    List<TaskDTO> getAllTasks();
+//    List<TaskDTO> getAllTasks();
 
     List<TaskDTO> getAllTasksByTaskColumn(Long taskColumnId) throws TaskColumnException;
 

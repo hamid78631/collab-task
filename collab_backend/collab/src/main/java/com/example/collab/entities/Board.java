@@ -23,7 +23,7 @@ public class Board {
     @JoinColumn(name = "workspace_id" , nullable = false)
     private Workspace workspace ;
 
-    @OneToMany(mappedBy ="board", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy ="board", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("position ASC")
     private List<TaskColumn> taskColumns ;
 

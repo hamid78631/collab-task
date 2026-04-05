@@ -15,8 +15,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -29,6 +27,7 @@ public class TaskServiceImpl implements TaskService {
     private TaskRepository taskRepository;
     private TaskColumnRepository taskColumnRepository;
     private UserRepository userRepository;
+    private NotificationService notificationService;
 
     @Override
     public TaskDTO saveTask(TaskDTO taskDTO) throws TaskException, UserNotFoundException {
@@ -41,6 +40,11 @@ public class TaskServiceImpl implements TaskService {
             User assignee = userRepository.findById(taskDTO.getAssigneeId())
                     .orElseThrow(() -> new UserNotFoundException("User not found ! "));
             task.setAssignee(assignee);
+            notificationService.createNotification(
+                    assignee.getId(),
+                    "You have been assigned to task: " + task.getTitle(),
+                    "TASK_ASSIGNED"
+            );
         }
         taskRepository.save(task);
         return dtoMapper.taskToTaskDTO(task);
@@ -54,9 +58,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDTO getTaskByTitle(String title) {
-        Task task = taskRepository.findByTitle(title);
-
+    public TaskDTO getTaskByTitle(String title) throws TaskException {
+        Task task = taskRepository.findByTitle(title).orElseThrow(() -> new TaskException("Task not found"));
         return dtoMapper.taskToTaskDTO(task);
     }
 
@@ -83,12 +86,12 @@ public class TaskServiceImpl implements TaskService {
         return dtoMapper.taskToTaskDTO(task);
     }
 
-    @Override
-    public List<TaskDTO> getAllTasks() {
-        List<Task> tasks = taskRepository.findAll();
-
-        return tasks.stream().map(task-> dtoMapper.taskToTaskDTO(task)).toList();
-    }
+//    @Override
+//    public List<TaskDTO> getAllTasks() {
+//        List<Task> tasks = taskRepository.findAll();
+//
+//        return tasks.stream().map(task-> dtoMapper.taskToTaskDTO(task)).toList();
+//    }
 
     @Override
     public List<TaskDTO> getAllTasksByTaskColumn(Long taskColumnId) throws TaskColumnException {
@@ -108,10 +111,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO moveTask(Long taskId, Long targetColumnId) throws TaskException, TaskColumnException {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskException("Task not found"));
+        TaskColumn taskColumn = taskColumnRepository.findById(targetColumnId).orElseThrow(() -> new TaskColumnException("TaskColumn not found"));
 
-        Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskException("Task not found"));
-        TaskColumn taskColumn = taskColumnRepository.findById(targetColumnId).orElseThrow(()-> new TaskColumnException("TaskColumn not found"));
+        List<Task> targetTasks = taskRepository.findByTaskColumnIdOrderByPositionAsc(targetColumnId);
+        int newPosition = targetTasks.isEmpty() ? 0 : targetTasks.get(targetTasks.size() - 1).getPosition() + 1;
+
         task.setTaskColumn(taskColumn);
+        task.setPosition(newPosition);
         taskRepository.save(task);
 
         return dtoMapper.taskToTaskDTO(task);

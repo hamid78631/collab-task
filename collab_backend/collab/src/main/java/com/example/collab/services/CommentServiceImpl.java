@@ -13,7 +13,6 @@ import com.example.collab.repositories.TaskRepository;
 import com.example.collab.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,37 +72,15 @@ public class CommentServiceImpl implements CommentService{
         return dtoMapper.commentToCommentDTO(comment);
     }
 
-    @SneakyThrows
     @Override
     public List<CommentDTO> getCommentByUser(Long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User Not found !"));
-
-        List<Comment> comments = user.getComments();
-        return comments.stream().map( comment -> {
-            try {
-                return dtoMapper.commentToCommentDTO(comment);
-            } catch (TaskException e) {
-                throw new RuntimeException(e);
-            } catch (UserNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }).toList();
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User Not found !"));
+        return user.getComments().stream().map(dtoMapper::commentToCommentDTO).toList();
     }
 
-    @SneakyThrows
     @Override
     public List<CommentDTO> getCommentsByTask(Long taskId) throws UserNotFoundException {
-        Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskException("Task not found !"));
-
-        List<Comment> comments = task.getComments();
-        return comments.stream().map(comment-> {
-            try {
-                return dtoMapper.commentToCommentDTO(comment);
-            } catch (TaskException e) {
-                throw new RuntimeException(e);
-            } catch (UserNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }).toList();
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Task not found !"));
+        return task.getComments().stream().map(dtoMapper::commentToCommentDTO).toList();
     }
 }
