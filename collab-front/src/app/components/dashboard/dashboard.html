@@ -20,53 +20,53 @@
 
     <div class="content">
 
-      <app-stats-cards
-        [totalBoards]="totalBoards()"
-        [completedTasks]="completedTasks"
-        [lateTasks]="lateTasks"
-        [activeMembers]="activeMembers">
-      </app-stats-cards>
+<!--      <app-stats-cards-->
+<!--        [totalBoards]="totalBoards()"-->
+<!--        [completedTasks]="completedTasks"-->
+<!--        [lateTasks]="lateTasks"-->
+<!--        [activeMembers]="activeMembers">-->
+<!--      </app-stats-cards>-->
 
-      @if (lateTasks > 0) {
-      <div class="alert">
-        <svg class="alert-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <div>
-          <div class="alert-title">{{ lateTasks }} tâches dépassent leur deadline</div>
-          <div class="alert-sub">Vérifiez vos priorités</div>
-        </div>
-        <button class="alert-cta" routerLink="/tasks">Voir les retards →</button>
-      </div>
-      }
+<!--      @if (lateTasks > 0) {-->
+<!--      <div class="alert">-->
+<!--        <svg class="alert-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>-->
+<!--        <div>-->
+<!--          <div class="alert-title">{{ lateTasks }} tâches dépassent leur deadline</div>-->
+<!--          <div class="alert-sub">Vérifiez vos priorités</div>-->
+<!--        </div>-->
+<!--        <button class="alert-cta" routerLink="/tasks">Voir les retards →</button>-->
+<!--      </div>-->
+<!--      }-->
 
-      <app-board-grid
-        [boards]="filteredBoards()"
-        [viewMode]="viewMode"
-        (viewModeChange)="viewMode = $event"
-        (openModal)="showModal = true"
-        (toggleFav)="toggleFav($event)"
-        (openEdit)="openEditModal($event)"
-        (openDelete)="openDeleteConfirm($event)">
-      </app-board-grid>
+<!--      <app-board-grid-->
+<!--        [boards]="filteredBoards()"-->
+<!--        [viewMode]="viewMode"-->
+<!--        (viewModeChange)="viewMode = $event"-->
+<!--        (openModal)="showModal = true"-->
+<!--        (toggleFav)="toggleFav($event)"-->
+<!--        (openEdit)="openEditModal($event)"-->
+<!--        (openDelete)="openDeleteConfirm($event)">-->
+<!--      </app-board-grid>-->
 
     </div>
   </main>
 
 </div>
 
-<app-board-modals
-  [showModal]="showModal"
-  [showEditModal]="showEditModal"
-  [showDeleteConfirm]="showDeleteConfirm"
-  [newBoard]="newBoard"
-  [editBoard]="editBoard"
-  [nameError]="nameError"
-  [editNameError]="editNameError"
-  (create)="createBoard()"
-  (saveEdit)="saveEditBoard()"
-  (confirmDelete)="confirmDelete()"
-  (closeModal)="closeModal()"
-  (closeEdit)="closeEditModal()"
-  (closeDelete)="closeDeleteConfirm()"
-  (nameErrorChange)="nameError = $event"
-  (editNameErrorChange)="editNameError = $event">
-</app-board-modals>
+<!--<app-board-modals-->
+<!--  [showModal]="showModal"-->
+<!--  [showEditModal]="showEditModal"-->
+<!--  [showDeleteConfirm]="showDeleteConfirm"-->
+<!--  [newBoard]="newBoard"-->
+<!--  [editBoard]="editBoard"-->
+<!--  [nameError]="nameError"-->
+<!--  [editNameError]="editNameError"-->
+<!--  (create)="createBoard()"-->
+<!--  (saveEdit)="saveEditBoard()"-->
+<!--  (confirmDelete)="confirmDelete()"-->
+<!--  (closeModal)="closeModal()"-->
+<!--  (closeEdit)="closeEditModal()"-->
+<!--  (closeDelete)="closeDeleteConfirm()"-->
+<!--  (nameErrorChange)="nameError = $event"-->
+<!--  (editNameErrorChange)="editNameError = $event">-->
+<!--</app-board-modals>-->

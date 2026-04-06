@@ -1,0 +1,10 @@
+@for(ws of workspaces(); track ws.id){
+ <div>
+   <h2>{{ws.name}}</h2>
+
+   @for(board of boardsByWorkspace().get(ws.is) ?? []; track board.id{
+   <div> {{board.title}}</div>
+   }
+ </div>
+
+}

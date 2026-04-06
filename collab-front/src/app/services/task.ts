@@ -44,10 +44,7 @@ export class TaskService {
     return this.httpClient.get<TaskDTO[]>(`${this.apiUrl}/tasks/assignee/${assigneeId}`);
   }
 
-  moveTask(taskId: number, newColumnId: number, newPosition: number): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/tasks/${taskId}/move`, {
-      newColumnId,
-      newPosition,
-    });
+  moveTask(taskId: number, targetColumnId: number): Observable<any> {
+    return this.httpClient.put(`${this.apiUrl}/tasks/${taskId}/${targetColumnId}`, {});
   }
 }

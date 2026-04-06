@@ -11,6 +11,6 @@ export class CommentService {
 
   private api = 'http://localhost:8086/api';
   createComment(commentDTO: CommentDTO): Observable<CommentDTO> {
-    return this.http.post<CommentDTO>(`${this.api}/comments`, commentDTO);
+    return this.http.post<CommentDTO>(`${this.api}/comment`, commentDTO);
   }
 }

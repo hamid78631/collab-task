@@ -26,22 +26,22 @@ export class WorkspaceService {
 
   // Créer un nouveau workspace
   createWorkspace(workspace: WorkspaceDTO): Observable<WorkspaceDTO> {
-    return this.httpClient.post<WorkspaceDTO>(`${this.apiUrl}/workspace`, workspace);
+    return this.httpClient.post<WorkspaceDTO>(`${this.apiUrl}/workspaces`, workspace);
   }
 
   // Mettre à jour un workspace existant
   updateWorkspace(id: number, workspace: WorkspaceDTO): Observable<WorkspaceDTO> {
-    return this.httpClient.put<WorkspaceDTO>(`${this.apiUrl}/workspace/${id}`, workspace);
+    return this.httpClient.put<WorkspaceDTO>(`${this.apiUrl}/workspaces/${id}`, workspace);
   }
 
   // Supprimer un workspace
   deleteWorkspace(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.apiUrl}/workspace/${id}`);
+    return this.httpClient.delete<void>(`${this.apiUrl}/workspaces/${id}`);
   }
 
   // Ajouter un membre (on utilise UserDTO pour les membres)
   addMemberToWorkspace(workspaceId: number, userId: number): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/workspaces/${workspaceId}/collaborators`, { userId });
+    return this.httpClient.post(`${this.apiUrl}/workspaces/${workspaceId}/collaborators/${userId}`, {});
   }
 
   // Supprimer un membre
@@ -51,6 +51,6 @@ export class WorkspaceService {
 
   // Récupérer les membres
   getWorkspaceMembers(workspaceId: number): Observable<UserDTO[]> {
-    return this.httpClient.get<UserDTO[]>(`${this.apiUrl}/workspaces/${workspaceId}/collaborators`);
+    return this.httpClient.get<UserDTO[]>(`${this.apiUrl}/workspaces/${workspaceId}/members`);
   }
 }
