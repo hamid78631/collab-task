@@ -46,10 +46,10 @@ public class TaskController {
         return taskService.deleteTask(id);
     }
 
-    @GetMapping("/tasks/all")
-    public List<TaskDTO> getAllTasks() throws TaskException {
-        return taskService.getAllTasks();
-    }
+//    @GetMapping("/tasks/all")
+//    public List<TaskDTO> getAllTasks() throws TaskException {
+//        return taskService.getAllTasks();
+//    }
 
     @GetMapping("/tasks/column/{taskColumnId}")
     public List<TaskDTO> getAllTasksByTaskColumn(@PathVariable Long taskColumnId) throws  TaskColumnException {

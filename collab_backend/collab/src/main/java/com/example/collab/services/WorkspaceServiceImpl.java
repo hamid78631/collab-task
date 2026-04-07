@@ -146,4 +146,10 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 .map(user -> dtoMapperUser.userToUserDTO(user))
                 .toList();
     }
+
+    @Override
+    public List<WorkspaceDTO> getWorkspacesByUser(Long userId) throws WorkspaceException {
+        List<Workspace> workspaces = workspaceRepository.findByOwnerIdOrCollaboratorsId(userId, userId);
+        return workspaces.stream().map(dtoMapper::workspaceToWorkspaceDTO).toList();
+    }
 }

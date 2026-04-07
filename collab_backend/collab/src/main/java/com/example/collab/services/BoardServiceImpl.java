@@ -35,6 +35,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public BoardDTO createBoard(BoardDTO boardDTO) throws BoardException {
         Board board = dtoMapper.boardDTOToBoard(boardDTO);
+        board.setId(null);
 
         Workspace workspace = workspaceRepository.findById(boardDTO.getWorkspaceId()).orElseThrow(() -> new BoardException("Workspace not found"));
         board.setWorkspace(workspace);
@@ -70,10 +71,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void toggleFavorite(Long id) throws BoardException {
+    public BoardDTO toggleFavorite(Long id) throws BoardException {
         Board board = boardRepository.findById(id).orElseThrow(()-> new BoardException("Board not found"));
         board.setIsFavorite(!board.getIsFavorite());
-        boardRepository.save(board);
+        Board saved = boardRepository.save(board);
+        return dtoMapper.boardToBoardDTO(saved);
     }
     @Override
     public void updateBoardColor(Long id, String color) throws BoardException {

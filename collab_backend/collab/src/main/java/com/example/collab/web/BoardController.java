@@ -49,8 +49,8 @@ public class BoardController {
     }
 
     @PutMapping("/board/toggleFavorite/{id}")
-    public void toggleIsFavorite(@PathVariable Long id) throws WorkspaceException, BoardException {
-        boardService.toggleFavorite(id);
+    public BoardDTO toggleIsFavorite(@PathVariable Long id) throws WorkspaceException, BoardException {
+        return boardService.toggleFavorite(id);
     }
 
     @PutMapping("/board/color/{id}")

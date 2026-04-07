@@ -16,7 +16,7 @@ public interface BoardService {
     void deleteBoard(Long id) throws BoardException;
     List<BoardDTO> getBoards(Long workspaceId) throws BoardException, WorkspaceException;
 
-    void toggleFavorite(Long id) throws BoardException;
+    BoardDTO toggleFavorite(Long id) throws BoardException;
 
     void updateBoardColor(Long id, String color) throws BoardException;
 }

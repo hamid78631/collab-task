@@ -18,4 +18,5 @@ public interface WorkspaceService {
     void addMember(Long workspaceId , Long userId) throws UserNotFoundException, WorkspaceException;
     void removeMember(Long workspaceId , Long userId) throws UserNotFoundException, WorkspaceException;
     List<UserDTO> getWorkspaceMembers(Long workspaceId) throws WorkspaceException;
+    List<WorkspaceDTO> getWorkspacesByUser(Long userId) throws WorkspaceException;
 }

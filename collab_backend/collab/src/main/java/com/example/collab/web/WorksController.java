@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @Transactional
 @RestController
 @AllArgsConstructor
@@ -63,5 +64,10 @@ public class WorksController {
     @GetMapping("/workspaces/{id}/members")
     public List<UserDTO> getMembers(@PathVariable Long id) throws WorkspaceException {
         return workspaceService.getWorkspaceMembers(id);
+    }
+
+    @GetMapping("/workspaces/user/{userId}")
+    public List<WorkspaceDTO> getWorkspacesByUser(@PathVariable Long userId) throws WorkspaceException {
+        return workspaceService.getWorkspacesByUser(userId);
     }
 }
