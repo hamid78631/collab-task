@@ -19,7 +19,7 @@ export class BoardsPageComponent implements OnInit {
   boardsByWorkspace = signal<Map<number, BoardDTO[]>>(new Map());
 
   ngOnInit() {
-    this.workspaceService.getWorkspaces().subscribe({
+    this.workspaceService.getWorkspacesByUser(1).subscribe({
       next: (workspaces) => {
         this.workspaces.set(workspaces || []);
 

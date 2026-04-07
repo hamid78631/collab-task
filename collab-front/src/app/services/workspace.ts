@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { WorkspaceDTO } from '../models/workspace.model'; 
+import { WorkspaceDTO } from '../models/workspace.model';
 import { UserDTO } from '../models/user.model';
 
 @Injectable({
@@ -17,6 +17,9 @@ export class WorkspaceService {
   // Récupérer tous les workspaces
   getWorkspaces(): Observable<WorkspaceDTO[]> {
     return this.httpClient.get<WorkspaceDTO[]>(`${this.apiUrl}/workspaces`);
+  }
+  getWorkspacesByUser(id: number): Observable<WorkspaceDTO[]> {
+    return this.httpClient.get<WorkspaceDTO[]>(`${this.apiUrl}/workspaces/user/${id}`);
   }
 
   // Récupérer un workspace par son ID
