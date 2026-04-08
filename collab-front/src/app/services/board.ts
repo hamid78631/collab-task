@@ -29,12 +29,12 @@ export class BoardService {
     return this.http.get<BoardDTO[]>(`${this.api}/allBoards/${workspaceId}`);
   }
 
- 
+
   toggleIsFavorite(boardId: number): Observable<BoardDTO> {
     return this.http.put<BoardDTO>(`${this.api}/board/toggleFavorite/${boardId}`, {});
   }
 
-  
+
   updateBoardColor(boardId: number, color: string): Observable<BoardDTO> {
     return this.http.put<BoardDTO>(`${this.api}/board/color/${boardId}`, { color });
   }

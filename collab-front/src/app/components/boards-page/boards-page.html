@@ -1,10 +1,178 @@
-@for(ws of workspaces(); track ws.id){
- <div>
-   <h2>{{ws.name}}</h2>
+<div class="layout" (click)="closeMenu()">
 
-   @for(board of boardsByWorkspace().get(ws.is) ?? []; track board.id{
-   <div> {{board.title}}</div>
-   }
- </div>
+  <!-- ─── Sidebar ─────────────────────────────── -->
+  <aside class="sidebar">
 
+    <div class="sidebar-logo">
+      <div class="logo-mark">C</div>
+      <span class="logo-name">Collab AI</span>
+    </div>
+
+    <div class="sidebar-nav">
+      <a class="nav-item" [routerLink]="['/dashboard']">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm0 6a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H3a1 1 0 01-1-1V9zm8-1a1 1 0 00-1 1v4a1 1 0 001 1h2a1 1 0 001-1V9a1 1 0 00-1-1h-2z"/>
+        </svg>
+        Tableau de bord
+      </a>
+      <a class="nav-item active" [routerLink]="['/boards']">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3a1.5 1.5 0 011.5 1.5v3a1.5 1.5 0 01-1.5 1.5h-3A1.5 1.5 0 019 13.5v-3z"/>
+        </svg>
+        Mes boards
+      </a>
+    </div>
+
+    <span class="sidebar-section-label">Workspaces</span>
+
+    <div class="sidebar-nav">
+      @for(ws of workspaces(); track ws.id){
+        <div class="ws-nav-item">
+          <div class="ws-nav-avatar">{{ ws.name.charAt(0).toUpperCase() }}</div>
+          {{ ws.name }}
+        </div>
+      }
+    </div>
+
+  </aside>
+
+  <!-- ─── Main ─────────────────────────────────── -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <span class="topbar-title">Mes boards</span>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+
+      @for(ws of workspaces(); track ws.id){
+        <section>
+          <div class="section-header">
+            <div class="ws-header">
+              <div class="ws-avatar">{{ ws.name.charAt(0).toUpperCase() }}</div>
+              <span class="ws-name">{{ ws.name }}</span>
+              <span class="ws-count">{{ getBoardCount(ws.id) }} boards</span>
+            </div>
+          </div>
+
+          <div class="boards-grid">
+
+            @for(board of boardsByWorkspace().get(ws.id) ?? []; track board.id){
+              <div class="board-card" [routerLink]="activeMenuBoardId() === board.id ? null : ['/board', board.id]">
+                <div class="accent-bar" [style.background]="board.backgroundColor || '#4F46E5'"></div>
+                <div class="card-body">
+                  <div class="card-title">{{ board.title }}</div>
+                </div>
+                <div class="card-footer">
+                  <button
+                    class="btn-fav"
+                    [class.active]="board.isFavorite"
+                    (click)="toggleFavorite(board.id, $event)"
+                    [title]="board.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'">
+                    ★
+                  </button>
+                  <button class="btn-menu" (click)="openMenu(board.id, $event)" title="Options">⋯</button>
+                </div>
+
+                <!-- Menu contextuel -->
+                @if(activeMenuBoardId() === board.id){
+                  <div class="card-menu" (click)="$event.stopPropagation()">
+                    <button class="menu-item" (click)="openEditModal(board, $event)">
+                      <span class="menu-icon">✏️</span> Renommer
+                    </button>
+                    <div class="menu-divider"></div>
+                    <div class="menu-label">Couleur</div>
+                    <div class="menu-colors">
+                      @for(color of colorPalette; track color){
+                        <div
+                          class="color-dot"
+                          [class.color-dot--active]="(board.backgroundColor || '#4F46E5') === color"
+                          [style.background]="color"
+                          (click)="changeColor(board, color, $event)">
+                        </div>
+                      }
+                    </div>
+                    <div class="menu-divider"></div>
+                    <button class="menu-item menu-item--danger" (click)="askDeleteBoard(board.id, $event)">
+                      <span class="menu-icon">🗑️</span> Supprimer
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Carte "Créer un board" -->
+            <div class="board-card board-card--new" (click)="openCreateModal(ws.id)">
+              <div class="new-icon">+</div>
+              <span class="new-label">Créer un board</span>
+            </div>
+
+          </div>
+        </section>
+      }
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── Modal Créer / Renommer ────────────────── -->
+@if(showBoardModal()){
+  <div class="modal-backdrop" (click)="closeBoardModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">{{ modalMode() === 'create' ? 'Créer un board' : 'Renommer le board' }}</span>
+        <button class="modal-close" (click)="closeBoardModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="modal-field-label">Nom du board</label>
+        <input
+          class="modal-input"
+          type="text"
+          placeholder="Ex : Marketing, Dev, Design…"
+          [ngModel]="modalTitle()"
+          (ngModelChange)="modalTitle.set($event)"
+          (keydown.enter)="saveBoardModal()"
+          autofocus />
+        <label class="modal-field-label" style="margin-top: 1rem;">Couleur</label>
+        <div class="modal-colors">
+          @for(color of colorPalette; track color){
+            <div
+              class="color-dot color-dot--lg"
+              [class.color-dot--active]="modalColor() === color"
+              [style.background]="color"
+              (click)="modalColor.set(color)">
+            </div>
+          }
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeBoardModal()">Annuler</button>
+        <button class="btn-confirm" (click)="saveBoardModal()" [disabled]="!modalTitle().trim()">
+          {{ modalMode() === 'create' ? 'Créer' : 'Enregistrer' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ─── Modal Confirmation Suppression ────────── -->
+@if(confirmDeleteBoardId() !== null){
+  <div class="modal-backdrop" (click)="cancelDelete()">
+    <div class="modal modal--sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">Supprimer ce board ?</span>
+        <button class="modal-close" (click)="cancelDelete()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="delete-warning">Cette action est irréversible. Toutes les colonnes et tâches associées seront supprimées.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
+        <button class="btn-danger" (click)="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
 }
