@@ -13,4 +13,12 @@ export class CommentService {
   createComment(commentDTO: CommentDTO): Observable<CommentDTO> {
     return this.http.post<CommentDTO>(`${this.api}/comment`, commentDTO);
   }
+
+  getCommentsByTask(taskId: number): Observable<CommentDTO[]> {
+    return this.http.get<CommentDTO[]>(`${this.api}/comments/task/${taskId}`);
+  }
+
+  deleteComment(commentId: number): Observable<CommentDTO> {
+    return this.http.delete<CommentDTO>(`${this.api}/comment/${commentId}`);
+  }
 }

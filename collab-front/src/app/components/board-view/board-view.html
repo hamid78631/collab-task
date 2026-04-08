@@ -1,1 +1,214 @@
-<p>board-view works!</p>
+<!-- ─── Topbar ─────────────────────────────────────────── -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="btn-back" [routerLink]="['/boards']">
+      <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+      </svg>
+      Mes boards
+    </a>
+    <div class="topbar-sep"></div>
+    @if(board()) {
+      <div class="board-color-dot" [style.background]="board()!.backgroundColor || '#4F46E5'"></div>
+      <span class="topbar-title">{{ board()!.title }}</span>
+    }
+  </div>
+</header>
+
+<!-- ─── Kanban ────────────────────────────────────────────── -->
+<div class="kanban-wrapper">
+  <div class="kanban">
+
+    @for(col of columns(); track col.id) {
+      <div
+        class="column"
+        [class.column--dragover]="dragOverColumnId() === col.id"
+        (dragover)="onDragOver(col.id, $event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop(col.id, $event)">
+
+        <!-- Entête colonne -->
+        <div class="col-header">
+          @if(editingColumnId() === col.id) {
+            <input
+              class="col-name-input"
+              [ngModel]="editingColumnName()"
+              (ngModelChange)="editingColumnName.set($event)"
+              (blur)="saveRenameColumn(col)"
+              (keydown.enter)="saveRenameColumn(col)"
+              (keydown.escape)="cancelRenameColumn()" />
+          } @else {
+            <span class="col-name" (dblclick)="startRenameColumn(col)">{{ col.name }}</span>
+            <span class="col-count">{{ getColumnTasks(col.id).length }}</span>
+          }
+          <button class="btn-col-delete" (click)="deleteColumn(col.id)" title="Supprimer la colonne">✕</button>
+        </div>
+
+        <!-- Corps : cartes tâches -->
+        <div class="col-body">
+          @for(task of getColumnTasks(col.id); track task.id) {
+            <div
+              class="task-card"
+              draggable="true"
+              [class.task-card--dragging]="draggedTaskId() === task.id"
+              (dragstart)="onDragStart(task.id!, col.id, $event)"
+              (dragend)="onDragEnd()"
+              (click)="openTaskModal(task)">
+
+              <div class="task-top">
+                <span class="priority-badge priority-{{ task.priority.toLowerCase() }}">
+                  {{ priorityLabel(task.priority) }}
+                </span>
+                <button class="btn-task-delete" (click)="deleteTask(task.id!, col.id, $event)" title="Supprimer">✕</button>
+              </div>
+              <div class="task-title">{{ task.title }}</div>
+              @if(task.description) {
+                <div class="task-desc">{{ task.description }}</div>
+              }
+            </div>
+          }
+
+          <!-- Formulaire ajout tâche -->
+          @if(addingTaskColumnId() === col.id) {
+            <div class="add-task-form" (click)="$event.stopPropagation()">
+              <input
+                class="add-task-input"
+                placeholder="Titre de la tâche…"
+                [ngModel]="newTaskTitle()"
+                (ngModelChange)="newTaskTitle.set($event)"
+                (keydown.enter)="addTask(col.id)"
+                (keydown.escape)="cancelAddTask()" />
+              <div class="add-task-actions">
+                <button class="btn-add-confirm" (click)="addTask(col.id)">Ajouter</button>
+                <button class="btn-add-cancel" (click)="cancelAddTask()">Annuler</button>
+              </div>
+            </div>
+          } @else {
+            <button class="btn-add-task" (click)="startAddTask(col.id)">
+              + Ajouter une tâche
+            </button>
+          }
+        </div>
+
+      </div>
+    }
+
+    <!-- Ajouter une colonne -->
+    @if(showAddColumn()) {
+      <div class="column column--new">
+        <input
+          class="col-name-input"
+          placeholder="Nom de la colonne…"
+          [ngModel]="newColumnName()"
+          (ngModelChange)="newColumnName.set($event)"
+          (keydown.enter)="addColumn()"
+          (keydown.escape)="showAddColumn.set(false)" />
+        <div class="add-task-actions" style="margin-top: 8px;">
+          <button class="btn-add-confirm" (click)="addColumn()">Créer</button>
+          <button class="btn-add-cancel" (click)="showAddColumn.set(false)">Annuler</button>
+        </div>
+      </div>
+    } @else {
+      <button class="btn-add-col" (click)="showAddColumn.set(true)">
+        + Ajouter une colonne
+      </button>
+    }
+
+  </div>
+</div>
+
+<!-- ─── Modal Détail Tâche ────────────────────────────────── -->
+@if(selectedTask()) {
+  <div class="modal-backdrop" (click)="closeTaskModal()">
+    <div class="task-modal" (click)="$event.stopPropagation()">
+
+      <!-- En-tête modal -->
+      <div class="task-modal-header">
+        <input
+          class="task-modal-title"
+          [ngModel]="modalTitle()"
+          (ngModelChange)="modalTitle.set($event); modalDirty.set(true)"
+          (keydown.enter)="saveTaskModal()"
+          placeholder="Titre de la tâche" />
+        <button class="modal-close" (click)="closeTaskModal()">✕</button>
+      </div>
+
+      <div class="task-modal-body">
+
+        <!-- Priorité -->
+        <div class="modal-field">
+          <label class="modal-label">Priorité</label>
+          <div class="priority-selector">
+            @for(p of ['HIGH', 'MEDIUM', 'LOW']; track p) {
+              <button
+                class="priority-btn priority-btn-{{ p.toLowerCase() }}"
+                [class.priority-btn--active]="modalPriority() === p"
+                (click)="modalPriority.set($any(p)); modalDirty.set(true)">
+                {{ priorityLabel(p) }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="modal-field">
+          <label class="modal-label">Description</label>
+          <textarea
+            class="task-modal-desc"
+            placeholder="Ajouter une description…"
+            rows="4"
+            [ngModel]="modalDesc()"
+            (ngModelChange)="modalDesc.set($event); modalDirty.set(true)">
+          </textarea>
+        </div>
+
+        <!-- Bouton sauvegarder -->
+        @if(modalDirty()) {
+          <div class="modal-save-row">
+            <button class="btn-save" (click)="saveTaskModal()">Enregistrer</button>
+            <button class="btn-discard" (click)="openTaskModal(selectedTask()!)">Annuler</button>
+          </div>
+        }
+
+        <!-- Commentaires -->
+        <div class="modal-field">
+          <label class="modal-label">Commentaires</label>
+
+          <div class="comments-list">
+            @if(taskComments().length === 0) {
+              <p class="no-comments">Aucun commentaire pour l'instant.</p>
+            }
+            @for(comment of taskComments(); track comment.id) {
+              <div class="comment-item">
+                <div class="comment-avatar">U</div>
+                <div class="comment-content">
+                  <p class="comment-text">{{ comment.content }}</p>
+                  @if(comment.createdAt) {
+                    <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
+                  }
+                </div>
+                <button class="btn-comment-delete" (click)="deleteComment(comment.id!)">✕</button>
+              </div>
+            }
+          </div>
+
+          <!-- Nouveau commentaire -->
+          <div class="comment-form">
+            <textarea
+              class="comment-input"
+              placeholder="Écrire un commentaire… (Ctrl+Entrée pour envoyer)"
+              rows="2"
+              [ngModel]="newCommentContent()"
+              (ngModelChange)="newCommentContent.set($event)"
+              (keydown.control.enter)="addComment()">
+            </textarea>
+            <button class="btn-comment-send" (click)="addComment()" [disabled]="!newCommentContent().trim()">
+              Envoyer
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+}
