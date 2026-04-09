@@ -1,10 +1,11 @@
 <div class="stats">
+
   <div class="scard">
     <div class="scard-top">
-      <div class="sico si-b">
+      <div class="sico si-1">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       </div>
-      <span class="trend t-up">↑ +2 cette semaine</span>
+      <span class="trend trend-up">↑ +2 cette semaine</span>
     </div>
     <div class="sval">{{ totalBoards }}</div>
     <div class="slabel">Boards actifs</div>
@@ -12,10 +13,10 @@
 
   <div class="scard">
     <div class="scard-top">
-      <div class="sico si-g">
+      <div class="sico si-2">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
       </div>
-      <span class="trend t-up">↑ 18% vs hier</span>
+      <span class="trend trend-up">↑ 18% vs hier</span>
     </div>
     <div class="sval">{{ completedTasks }}</div>
     <div class="slabel">Tâches complétées</div>
@@ -23,10 +24,10 @@
 
   <div class="scard">
     <div class="scard-top">
-      <div class="sico si-r">
+      <div class="sico si-3">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       </div>
-      <span class="trend t-down">↑ +3 nouvelles</span>
+      <span class="trend trend-warn">↑ +3 nouvelles</span>
     </div>
     <div class="sval">{{ lateTasks }}</div>
     <div class="slabel">Tâches en retard</div>
@@ -34,12 +35,13 @@
 
   <div class="scard">
     <div class="scard-top">
-      <div class="sico si-n">
+      <div class="sico si-4">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
       </div>
-      <span class="trend t-up">↑ 5 ce mois</span>
+      <span class="trend">5 ce mois</span>
     </div>
     <div class="sval">{{ activeMembers }}</div>
     <div class="slabel">Membres actifs</div>
   </div>
+
 </div>
