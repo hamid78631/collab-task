@@ -1,5 +1,5 @@
 export interface TaskColumnDTO {
-  id: number;
+  id?: number;
   name: string;
   position: number;
   boardId: number;

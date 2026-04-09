@@ -63,7 +63,7 @@ export class BoardView implements OnInit {
     this.columnService.getAllTaskColumnsByBoardId(id).subscribe({
       next: (cols) => {
         this.columns.set(cols || []);
-        cols.forEach(col => this.loadTasks(col.id));
+        cols.forEach(col => this.loadTasks(col.id!));
       },
       error: (err) => console.error('Erreur chargement colonnes', err)
     });
@@ -84,13 +84,13 @@ export class BoardView implements OnInit {
 
   addColumn() {
     const name = this.newColumnName().trim();
-    if (!name) return;
-    const col: TaskColumnDTO = { id: 0, name, position: this.columns().length, boardId: this.board()!.id };
+    if (!name || !this.board()) return;
+    const col: TaskColumnDTO = { name, position: this.columns().length, boardId: this.board()!.id };
     this.columnService.createTaskColumn(col).subscribe({
       next: (created) => {
         this.columns.set([...this.columns(), created]);
         const map = new Map(this.tasksByColumn());
-        map.set(created.id, []);
+        map.set(created.id!, []);
         this.tasksByColumn.set(map);
         this.newColumnName.set('');
         this.showAddColumn.set(false);
@@ -100,14 +100,14 @@ export class BoardView implements OnInit {
   }
 
   startRenameColumn(col: TaskColumnDTO) {
-    this.editingColumnId.set(col.id);
+    this.editingColumnId.set(col.id ?? null);
     this.editingColumnName.set(col.name);
   }
 
   saveRenameColumn(col: TaskColumnDTO) {
     const name = this.editingColumnName().trim();
     if (!name) { this.cancelRenameColumn(); return; }
-    this.columnService.updateTaskColumn(col.id, { ...col, name }).subscribe({
+    this.columnService.updateTaskColumn(col.id!, { ...col, name }).subscribe({
       next: (updated) => {
         this.columns.set(this.columns().map(c => c.id === updated.id ? updated : c));
         this.editingColumnId.set(null);

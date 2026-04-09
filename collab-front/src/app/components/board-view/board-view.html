@@ -33,14 +33,14 @@
     <div
       class="column"
       [class.column--dragover]="dragOverColumnId() === col.id"
-      (dragover)="onDragOver(col.id, $event)"
+      (dragover)="onDragOver(col.id!, $event)"
       (dragleave)="onDragLeave($event)"
-      (drop)="onDrop(col.id, $event)">
+      (drop)="onDrop(col.id!, $event)">
 
       <!-- Entête colonne -->
       <div class="col-header">
         <!-- Barre de couleur identifiant la colonne -->
-        <div class="col-accent" [style.background]="getColumnColor(col.id)"></div>
+        <div class="col-accent" [style.background]="getColumnColor(col.id!)"></div>
 
         @if(editingColumnId() === col.id) {
         <input
@@ -52,10 +52,10 @@
           (keydown.escape)="cancelRenameColumn()" />
         } @else {
         <span class="col-name" (dblclick)="startRenameColumn(col)">{{ col.name }}</span>
-        <span class="col-count">{{ getColumnTasks(col.id).length }}</span>
+        <span class="col-count">{{ getColumnTasks(col.id!).length }}</span>
         }
 
-        <button class="btn-col-delete" (click)="deleteColumn(col.id)" title="Supprimer la colonne">
+        <button class="btn-col-delete" (click)="deleteColumn(col.id!)" title="Supprimer la colonne">
           <svg viewBox="0 0 16 16" fill="currentColor" width="11" height="11">
             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -65,13 +65,13 @@
 
       <!-- Corps : cartes tâches -->
       <div class="col-body">
-        @for(task of getColumnTasks(col.id); track task.id) {
+        @for(task of getColumnTasks(col.id!); track task.id) {
         <div
           class="task-card"
           draggable="true"
           [class.task-card--dragging]="draggedTaskId() === task.id"
           [class.task-card--done]="isDoneColumn(col.name)"
-          (dragstart)="onDragStart(task.id!, col.id, $event)"
+          (dragstart)="onDragStart(task.id!, col.id!, $event)"
           (dragend)="onDragEnd()"
           (click)="openTaskModal(task)">
 
@@ -79,7 +79,7 @@
                 <span class="priority-badge priority-{{ task.priority.toLowerCase() }}">
                   {{ priorityLabel(task.priority) }}
                 </span>
-            <button class="btn-task-delete" (click)="deleteTask(task.id!, col.id, $event)" title="Supprimer">
+            <button class="btn-task-delete" (click)="deleteTask(task.id!, col.id!, $event)" title="Supprimer">
               <svg viewBox="0 0 16 16" fill="currentColor" width="10" height="10">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -121,15 +121,15 @@
             placeholder="Titre de la tâche…"
             [ngModel]="newTaskTitle()"
             (ngModelChange)="newTaskTitle.set($event)"
-            (keydown.enter)="addTask(col.id)"
+            (keydown.enter)="addTask(col.id!)"
             (keydown.escape)="cancelAddTask()" />
           <div class="add-task-actions">
-            <button class="btn-add-confirm" (click)="addTask(col.id)">Ajouter</button>
+            <button class="btn-add-confirm" (click)="addTask(col.id!)">Ajouter</button>
             <button class="btn-add-cancel" (click)="cancelAddTask()">Annuler</button>
           </div>
         </div>
         } @else {
-        <button class="btn-add-task" (click)="startAddTask(col.id)">
+        <button class="btn-add-task" (click)="startAddTask(col.id!)">
           + Ajouter une tâche
         </button>
         }
