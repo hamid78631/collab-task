@@ -306,4 +306,34 @@ export class BoardView implements OnInit {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
   }
+
+  // Couleur dérivée de la position de la colonne dans le board
+  private readonly COLUMN_COLORS = [
+    '#4F46E5', '#0891B2', '#16A34A', '#D97706', '#DC2626', '#7C3AED', '#DB2777', '#0D9488'
+  ];
+
+  getColumnColor(colId: number): string {
+    const idx = this.columns().findIndex(c => c.id === colId);
+    return this.COLUMN_COLORS[idx % this.COLUMN_COLORS.length] ?? '#4F46E5';
+  }
+
+  // Détecte si une colonne représente un état "terminé" d'après son nom
+  isDoneColumn(colName: string): boolean {
+    const n = colName.toLowerCase();
+    return n.includes('terminé') || n.includes('done') || n.includes('fini')
+        || n.includes('completed') || n.includes('fermé') || n.includes('closed');
+  }
+
+  // Couleur de la colonne qui contient la tâche sélectionnée
+  selectedTaskColumnColor(): string {
+    const colId = this.selectedTask()?.taskColumnId;
+    if (!colId) return '#4F46E5';
+    return this.getColumnColor(colId);
+  }
+
+  // Couleur d'avatar pour un assignee (basée sur l'id)
+  getAssigneeColor(assigneeId: number): string {
+    const colors = ['#4F46E5', '#0891B2', '#16A34A', '#D97706', '#DC2626', '#7C3AED'];
+    return colors[assigneeId % colors.length];
+  }
 }

@@ -240,7 +240,7 @@
   border: 0.5px solid rgba(9, 30, 66, 0.12);
   background: #ffffff;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   transition: transform 0.15s, box-shadow 0.15s;
 }
 
@@ -552,4 +552,99 @@
   color: #5e6c84;
   line-height: 1.5;
   margin: 0;
+}
+
+/* ─── Modal suppression moderne ───────────────── */
+.delete-modal {
+  background: #ffffff;
+  border-radius: 18px;
+  width: 400px;
+  padding: 2.25rem 2rem 2rem;
+  text-align: center;
+  box-shadow: 0 24px 64px rgba(9, 30, 66, 0.22);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.delete-modal-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #fee2e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+
+.delete-modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #172b4d;
+  margin-bottom: 0.6rem;
+}
+
+.delete-modal-desc {
+  font-size: 13.5px;
+  color: #5e6c84;
+  line-height: 1.6;
+  margin-bottom: 1.75rem;
+  max-width: 300px;
+}
+
+.delete-modal-desc strong {
+  color: #172b4d;
+  font-weight: 600;
+}
+
+.delete-modal-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-delete-cancel {
+  padding: 9px 22px;
+  border-radius: 9px;
+  border: 1.5px solid rgba(9, 30, 66, 0.18);
+  background: none;
+  color: #5e6c84;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.btn-delete-cancel:hover {
+  background: #f4f5f7;
+  border-color: rgba(9, 30, 66, 0.3);
+}
+
+.btn-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 22px;
+  border-radius: 9px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn-delete-confirm:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.btn-delete-confirm:active {
+  transform: translateY(0);
 }

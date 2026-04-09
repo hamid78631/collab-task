@@ -1,6 +1,6 @@
 <div class="layout" (click)="closeMenu()">
 
-  <!-- ─── Sidebar ─────────────────────────────── -->
+  <!-- ─── Sidebar -->
   <aside class="sidebar">
 
     <div class="sidebar-logo">
@@ -17,7 +17,8 @@
       </a>
       <a class="nav-item active" [routerLink]="['/boards']">
         <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3a1.5 1.5 0 011.5 1.5v3a1.5 1.5 0 01-1.5 1.5h-3A1.5 1.5 0 019 13.5v-3z"/>
+          <path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5
+          1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3a1.5 1.5 0 011.5 1.5v3a1.5 1.5 0 01-1.5 1.5h-3A1.5 1.5 0 019 13.5v-3z"/>
         </svg>
         Mes boards
       </a>
@@ -36,7 +37,7 @@
 
   </aside>
 
-  <!-- ─── Main ─────────────────────────────────── -->
+  <!--  Main  -->
   <div class="main">
 
     <!-- Topbar -->
@@ -96,7 +97,11 @@
                     </div>
                     <div class="menu-divider"></div>
                     <button class="menu-item menu-item--danger" (click)="askDeleteBoard(board.id, $event)">
-                      <span class="menu-icon">🗑️</span> Supprimer
+                      <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13" style="flex-shrink:0">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                      </svg>
+                      Supprimer
                     </button>
                   </div>
                 }
@@ -106,7 +111,7 @@
             <!-- Carte "Créer un board" -->
             <div class="board-card board-card--new" (click)="openCreateModal(ws.id)">
               <div class="new-icon">+</div>
-              <span class="new-label">Créer un board</span>
+              <span class="new-label" >Créer un board</span>
             </div>
 
           </div>
@@ -161,18 +166,31 @@
 <!-- ─── Modal Confirmation Suppression ────────── -->
 @if(confirmDeleteBoardId() !== null){
   <div class="modal-backdrop" (click)="cancelDelete()">
-    <div class="modal modal--sm" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <span class="modal-title">Supprimer ce board ?</span>
-        <button class="modal-close" (click)="cancelDelete()">✕</button>
+    <div class="delete-modal" (click)="$event.stopPropagation()">
+
+      <div class="delete-modal-icon">
+        <svg viewBox="0 0 16 16" fill="currentColor" width="22" height="22">
+          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+        </svg>
       </div>
-      <div class="modal-body">
-        <p class="delete-warning">Cette action est irréversible. Toutes les colonnes et tâches associées seront supprimées.</p>
+
+      <h2 class="delete-modal-title">Supprimer ce board ?</h2>
+      <p class="delete-modal-desc">
+        Cette action est <strong>irréversible</strong>. Toutes les colonnes et tâches associées seront définitivement supprimées.
+      </p>
+
+      <div class="delete-modal-actions">
+        <button class="btn-delete-cancel" (click)="cancelDelete()">Annuler</button>
+        <button class="btn-delete-confirm" (click)="confirmDelete()">
+          <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+          </svg>
+          Supprimer définitivement
+        </button>
       </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
-        <button class="btn-danger" (click)="confirmDelete()">Supprimer</button>
-      </div>
+
     </div>
   </div>
 }
