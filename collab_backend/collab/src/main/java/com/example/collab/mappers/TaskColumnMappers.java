@@ -22,7 +22,7 @@ public class TaskColumnMappers {
 
     public TaskColumn taskColumnDTOToEntity(TaskColumnDTO dto){
         TaskColumn taskColumn = new TaskColumn();
-        BeanUtils.copyProperties(dto,taskColumn);
+        BeanUtils.copyProperties(dto, taskColumn, "id");
 
         return taskColumn;
     }
