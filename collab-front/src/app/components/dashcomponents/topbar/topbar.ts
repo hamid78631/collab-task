@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth';
 
 @Component({
   selector: 'app-topbar',
@@ -20,4 +21,10 @@ export class TopbarComponent {
   @Output() sortByChange = new EventEmitter<string>();
   @Output() openModal = new EventEmitter<void>();
   @Output() searchFocusedChange = new EventEmitter<boolean>();
+
+  constructor(private authService: AuthService) {}
+
+  logout() {
+    this.authService.logout();
+  }
 }

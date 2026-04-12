@@ -18,6 +18,7 @@ export class RegisterComponent {
   password = '';
   errorMessage = signal('');
   isLoading = signal(false);
+  showPassword = signal(false);
 
   constructor(private authService: AuthService, private router: Router) {}
 
