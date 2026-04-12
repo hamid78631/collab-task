@@ -2,11 +2,16 @@ import { Routes } from '@angular/router';
 import { Dashboard } from './components/dashboard/dashboard';
 import { BoardView } from './components/board-view/board-view';
 import { BoardsPageComponent } from './components/boards-page/boards-page';
+import { authGuard } from './guards/auth.gaurd-guard';
+import { LoginComponent } from './components/login/login';
+import { RegisterComponent } from './components/register/register';
 
 export const routes: Routes = [
-    {path: '' , redirectTo : 'dashboard' , pathMatch : 'full'},
-    {path: 'dashboard' , component: Dashboard},
-    {path : 'board/:id' , component: BoardView},
-    {path : 'boards' , component : BoardsPageComponent},
-    {path: '**', redirectTo: 'dashboard'}
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
+  { path: 'board/:id', component: BoardView, canActivate: [authGuard] },
+  { path: 'boards', component: BoardsPageComponent, canActivate: [authGuard] },
+  { path: '**', redirectTo: 'login' },
 ];
