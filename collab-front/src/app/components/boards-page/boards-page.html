@@ -33,6 +33,10 @@
           {{ ws.name }}
         </div>
       }
+      <button class="btn-add-workspace" (click)="openWorkspaceModal(); $event.stopPropagation()">
+        <span class="btn-add-workspace-icon">+</span>
+        Nouveau workspace
+      </button>
     </div>
 
   </aside>
@@ -43,6 +47,12 @@
     <!-- Topbar -->
     <header class="topbar">
       <span class="topbar-title">Mes boards</span>
+      <div class="topbar-actions">
+        <button class="btn-invite" (click)="openCreateModalFromTopbar()" [disabled]="workspaces().length === 0">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:5px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouveau Board
+        </button>
+      </div>
     </header>
 
     <!-- Content -->
@@ -158,6 +168,37 @@
         <button class="btn-confirm" (click)="saveBoardModal()" [disabled]="!modalTitle().trim()">
           {{ modalMode() === 'create' ? 'Créer' : 'Enregistrer' }}
         </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ─── Modal Créer un Workspace ──────────────── -->
+@if(showWorkspaceModal()){
+  <div class="modal-backdrop" (click)="closeWorkspaceModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">Créer un workspace</span>
+        <button class="modal-close" (click)="closeWorkspaceModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="modal-field-label">Nom du workspace</label>
+        <input
+          class="modal-input"
+          [class.modal-input--error]="newWorkspaceNameError()"
+          type="text"
+          placeholder="Ex : Mon équipe, Projet X…"
+          [ngModel]="newWorkspaceName()"
+          (ngModelChange)="newWorkspaceName.set($event); newWorkspaceNameError.set(false)"
+          (keydown.enter)="saveWorkspace()"
+          autofocus />
+        @if(newWorkspaceNameError()){
+          <span class="modal-field-error">Le nom ne peut pas être vide.</span>
+        }
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeWorkspaceModal()">Annuler</button>
+        <button class="btn-confirm" (click)="saveWorkspace()">Créer</button>
       </div>
     </div>
   </div>
