@@ -11,4 +11,5 @@ import { RouterModule } from '@angular/router';
 export class SidebarComponent {
   @Input() totalBoards = 0;
   @Input() lateTasks = 0;
+  name = localStorage.getItem('userName') ?? 'Utilisateur';
 }

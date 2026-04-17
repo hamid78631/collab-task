@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BoardService } from '../../services/board';
 import { WorkspaceService } from '../../services/workspace';
+import { AuthService } from '../../services/auth';
 import { BoardDTO } from '../../models/board.model';
 import { WorkspaceDTO } from '../../models/workspace.model';
 
@@ -16,6 +17,7 @@ export class BoardsPageComponent implements OnInit {
 
   private boardService = inject(BoardService);
   private workspaceService = inject(WorkspaceService);
+  private authService = inject(AuthService);
 
   workspaces = signal<WorkspaceDTO[]>([]);
   boardsByWorkspace = signal<Map<number, BoardDTO[]>>(new Map());
@@ -44,14 +46,14 @@ export class BoardsPageComponent implements OnInit {
   }
 
   private loadWorkspaces() {
-    this.workspaceService.getWorkspacesByUser(1).subscribe({
+    this.workspaceService.getWorkspacesByUser(this.authService.getCurrentUserId()).subscribe({
       next: (workspaces) => {
         this.workspaces.set(workspaces || []);
         workspaces.forEach(ws => {
-          this.boardService.getBoardsByWorkspaceId(ws.id).subscribe({
-            next: (boards) => {
-              const map = new Map(this.boardsByWorkspace());
-              map.set(ws.id, boards || []);
+                                                    this.boardService.getBoardsByWorkspaceId(ws.id).subscribe({
+                                                      next: (boards) => {
+                                                        const map = new Map(this.boardsByWorkspace());
+                                                        map.set(ws.id, boards || []);
               this.boardsByWorkspace.set(map);
             },
             error: (err) => console.error(`Erreur boards workspace ${ws.id}`, err)

@@ -19,7 +19,6 @@ export class TopbarComponent {
 
   @Output() searchTermChange = new EventEmitter<string>();
   @Output() sortByChange = new EventEmitter<string>();
-  @Output() openModal = new EventEmitter<void>();
   @Output() searchFocusedChange = new EventEmitter<boolean>();
 
   constructor(private authService: AuthService) {}
