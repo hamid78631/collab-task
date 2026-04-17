@@ -14,8 +14,7 @@
       [searchFocused]="searchFocused"
       (searchTermChange)="searchTerm = $event"
       (sortByChange)="sortBy = $event"
-      (searchFocusedChange)="searchFocused = $event"
-      (openModal)="showModal = true">
+      (searchFocusedChange)="searchFocused = $event">
     </app-topbar>
 
     <div class="content">
@@ -42,7 +41,6 @@
         [boards]="filteredBoards()"
         [viewMode]="viewMode"
         (viewModeChange)="viewMode = $event"
-        (openModal)="showModal = true"
         (toggleFav)="toggleFav($event)"
         (openEdit)="openEditModal($event)"
         (openDelete)="openDeleteConfirm($event)">
@@ -54,19 +52,13 @@
 </div>
 
 <app-board-modals
-  [showModal]="showModal"
   [showEditModal]="showEditModal"
   [showDeleteConfirm]="showDeleteConfirm"
-  [newBoard]="newBoard"
   [editBoard]="editBoard"
-  [nameError]="nameError"
   [editNameError]="editNameError"
-  (create)="createBoard()"
   (saveEdit)="saveEditBoard()"
   (confirmDelete)="confirmDelete()"
-  (closeModal)="closeModal()"
   (closeEdit)="closeEditModal()"
   (closeDelete)="closeDeleteConfirm()"
-  (nameErrorChange)="nameError = $event"
   (editNameErrorChange)="editNameError = $event">
 </app-board-modals>

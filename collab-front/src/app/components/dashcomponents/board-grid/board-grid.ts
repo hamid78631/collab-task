@@ -19,7 +19,6 @@ export class BoardGridComponent {
   @Input() viewMode: 'grid' | 'list' = 'grid';
 
   @Output() viewModeChange = new EventEmitter<'grid' | 'list'>();
-  @Output() openModal = new EventEmitter<void>();
   @Output() toggleFav = new EventEmitter<number>();
   @Output() openEdit = new EventEmitter<BoardDTO>();
   @Output() openDelete = new EventEmitter<number>();

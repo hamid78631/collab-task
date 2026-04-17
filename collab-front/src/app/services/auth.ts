@@ -16,6 +16,7 @@ interface AuthResponse {
   userId: number;
   email?: string;
   name?: string;
+  workspaceId?: number;
 }
 
 @Injectable({
@@ -64,5 +65,8 @@ export class AuthService {
     localStorage.setItem('userId', response.userId.toString());
     localStorage.setItem('userName', response.name ?? '');
     localStorage.setItem('userEmail', response.email ?? '');
+    if (response.workspaceId) {
+      localStorage.setItem('workspaceId', response.workspaceId.toString());
+    }
   }
 }

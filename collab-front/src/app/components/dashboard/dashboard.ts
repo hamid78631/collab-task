@@ -35,12 +35,9 @@ export class Dashboard implements OnInit {
   searchFocused = false;
   today = new Date();
 
-  showModal = false;
   showEditModal = false;
   showDeleteConfirm = false;
-  nameError = false;
   editNameError = false;
-  newBoard = { title: '', backgroundColor: '' };
   editBoard = { title: '', backgroundColor: '' };
 
   selectedBoard: BoardDTO | null = null;
@@ -61,7 +58,9 @@ export class Dashboard implements OnInit {
   });
 
   ngOnInit(): void {
-    this.boardService.getBoardsByWorkspaceId(1).subscribe({
+    const workspaceId = Number(localStorage.getItem('workspaceId'));
+    if (!workspaceId) return;
+    this.boardService.getBoardsByWorkspaceId(workspaceId).subscribe({
       next: (data) => this.boardsSignal.set(data || []),
       error: (err) => console.error('Erreur chargement boards :', err)
     });
@@ -111,18 +110,6 @@ export class Dashboard implements OnInit {
     });
   }
 
-  createBoard(): void {
-    if (!this.newBoard.title.trim()) { this.nameError = true; return; }
-    const dto: BoardDTO = { id: 0, title: this.newBoard.title, backgroundColor: this.newBoard.backgroundColor, isFavorite: false, workspaceId: 1 };
-    this.boardService.createBoard(dto).subscribe({
-      next: (created) => {
-        this.boardsSignal.update(boards => [...boards, created]);
-        this.closeModal();
-      }
-    });
-  }
-
-  closeModal(): void { this.showModal = false; this.newBoard = { title: '', backgroundColor: '' }; this.nameError = false; }
   closeEditModal(): void { this.showEditModal = false; this.selectedBoard = null; this.editBoard = { title: '', backgroundColor: '' }; }
   closeDeleteConfirm(): void { this.showDeleteConfirm = false; this.boardToDeleteId = null; }
 }
