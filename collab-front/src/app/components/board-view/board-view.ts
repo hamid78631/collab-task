@@ -5,6 +5,7 @@ import { BoardService } from '../../services/board';
 import { TaskColumnService } from '../../services/task-column';
 import { TaskService } from '../../services/task';
 import { CommentService } from '../../services/comment';
+import { AuthService } from '../../services/auth';
 import { BoardDTO } from '../../models/board.model';
 import { TaskColumnDTO } from '../../models/taskColumn.model';
 import { TaskDTO } from '../../models/task.model';
@@ -23,6 +24,7 @@ export class BoardView implements OnInit {
   private columnService = inject(TaskColumnService);
   private taskService = inject(TaskService);
   private commentService = inject(CommentService);
+  private authService = inject(AuthService);
 
   board = signal<BoardDTO | null>(null);
   columns = signal<TaskColumnDTO[]>([]);
@@ -263,7 +265,7 @@ export class BoardView implements OnInit {
   addComment() {
     const content = this.newCommentContent().trim();
     if (!content) return;
-    const comment: CommentDTO = { content, taskId: this.selectedTask()!.id!, authorId: 1 };
+    const comment: CommentDTO = { content, taskId: this.selectedTask()!.id!, authorId: this.authService.getCurrentUserId() };
     this.commentService.createComment(comment).subscribe({
       next: (created) => {
         this.taskComments.set([...this.taskComments(), created]);

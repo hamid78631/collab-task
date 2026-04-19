@@ -14,4 +14,5 @@ export const routes: Routes = [
   { path: 'board/:id', component: BoardView, canActivate: [authGuard] },
   { path: 'boards', component: BoardsPageComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login' },
+
 ];
