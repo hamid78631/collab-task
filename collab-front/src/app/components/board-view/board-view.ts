@@ -87,6 +87,7 @@ export class BoardView implements OnInit {
   addColumn() {
     const name = this.newColumnName().trim();
     if (!name || !this.board()) return;
+
     const col: TaskColumnDTO = { name, position: this.columns().length, boardId: this.board()!.id };
     this.columnService.createTaskColumn(col).subscribe({
       next: (created) => {

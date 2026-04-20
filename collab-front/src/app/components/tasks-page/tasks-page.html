@@ -1,0 +1,139 @@
+<div class="layout">
+
+  <!-- ─── Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">C</div>
+      <span class="logo-name">Collab</span>
+    </div>
+
+    <div class="sidebar-nav">
+      <a class="nav-item" [routerLink]="['/dashboard']">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm0 6a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H3a1 1 0 01-1-1V9zm8-1a1 1 0 00-1 1v4a1 1 0 001 1h2a1 1 0 001-1V9a1 1 0 00-1-1h-2z"/>
+        </svg>
+        Tableau de bord
+      </a>
+      <a class="nav-item" [routerLink]="['/boards']">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3a1.5 1.5 0 011.5 1.5v3a1.5 1.5 0 01-1.5 1.5h-3A1.5 1.5 0 019 13.5v-3z"/>
+        </svg>
+        Mes boards
+      </a>
+      <a class="nav-item active" [routerLink]="['/tasks']">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 2a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V2zm4.5 0a.5.5 0 000 1h3a.5.5 0 000-1h-3zM4 6.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z"/>
+        </svg>
+        Mes tâches
+      </a>
+    </div>
+  </aside>
+
+  <!-- ─── Main -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <span class="topbar-title">Mes tâches</span>
+    </header>
+
+    <!-- Filtres -->
+    <div class="filters-bar">
+      <span class="filters-label">Priorité :</span>
+      <button class="filter-btn" [class.active]="selectedPriority() === 'ALL'" (click)="setPriority('ALL')">Toutes</button>
+      <button class="filter-btn priority-high"   [class.active]="selectedPriority() === 'HIGH'"   (click)="setPriority('HIGH')">Haute</button>
+      <button class="filter-btn priority-medium" [class.active]="selectedPriority() === 'MEDIUM'" (click)="setPriority('MEDIUM')">Moyenne</button>
+      <button class="filter-btn priority-low"    [class.active]="selectedPriority() === 'LOW'"    (click)="setPriority('LOW')">Basse</button>
+    </div>
+
+    <!-- Liste des tâches -->
+    <div class="content">
+
+      @if(filteredTasks().length === 0) {
+        <div class="empty-state">
+          <svg viewBox="0 0 64 64" fill="none" width="48" height="48">
+            <rect x="8" y="8" width="48" height="48" rx="8" stroke="#cbd5e1" stroke-width="3"/>
+            <path d="M20 32h24M20 22h24M20 42h16" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <p class="empty-state-text">Aucune tâche assignée</p>
+        </div>
+      }
+
+      @for(task of filteredTasks(); track task.id) {
+        <div class="task-card">
+
+          <div class="task-card-left">
+            <span class="task-priority" [class]="'priority-' + task.priority.toLowerCase()">
+              {{ task.priority }}
+            </span>
+            <span class="task-title">{{ task.title }}</span>
+          </div>
+
+          <div class="task-card-right">
+            @if(task.createdAt) {
+              <span class="task-date">{{ task.createdAt | date:'dd MMM yyyy' }}</span>
+            }
+            <button class="btn-icon" title="Voir le détail" (click)="openDetailModal(task)">
+              <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                <path d="M8 4.5a.5.5 0 01.5.5v3h3a.5.5 0 010 1H8a.5.5 0 01-.5-.5V5a.5.5 0 01.5-.5z"/>
+                <path d="M8 16A8 8 0 108 0a8 8 0 000 16zm0-1A7 7 0 118 1a7 7 0 010 14z"/>
+              </svg>
+            </button>
+            <button class="btn-icon btn-icon--danger" title="Supprimer" (click)="deleteTask(task.id!)">
+              <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      }
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── Modal Détail / Modifier tâche -->
+@if(showDetailModal()) {
+  <div class="modal-backdrop" (click)="closeDetailModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">Modifier la tâche</span>
+        <button class="modal-close" (click)="closeDetailModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="modal-field-label">Titre</label>
+        <input
+          class="modal-input"
+          type="text"
+          [ngModel]="newTitle()"
+          (ngModelChange)="newTitle.set($event)"
+          placeholder="Titre de la tâche…" />
+
+        <label class="modal-field-label" style="margin-top:1rem">Description</label>
+        <textarea
+          class="modal-input modal-textarea"
+          [ngModel]="newDescription()"
+          (ngModelChange)="newDescription.set($event)"
+          placeholder="Description…">
+        </textarea>
+
+        <label class="modal-field-label" style="margin-top:1rem">Priorité</label>
+        <select
+          class="modal-input"
+          [ngModel]="newPriority()"
+          (ngModelChange)="newPriority.set($event)">
+          <option value="LOW">Basse</option>
+          <option value="MEDIUM">Moyenne</option>
+          <option value="HIGH">Haute</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeDetailModal()">Annuler</button>
+        <button class="btn-confirm" (click)="saveTask()" [disabled]="!newTitle().trim()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+}
