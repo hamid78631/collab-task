@@ -22,6 +22,7 @@ export class BoardsPageComponent implements OnInit {
   workspaces = signal<WorkspaceDTO[]>([]);
   boardsByWorkspace = signal<Map<number, BoardDTO[]>>(new Map());
 
+
   // Menu contextuel par carte
   activeMenuBoardId = signal<number | null>(null);
 
@@ -35,7 +36,10 @@ export class BoardsPageComponent implements OnInit {
 
   // Confirmation de suppression
   confirmDeleteBoardId = signal<number | null>(null);
-
+ //Modal de création de
+  showWorkspaceModal = signal(false);
+  newWorkspaceName = signal('');
+  newWorkspaceNameError = signal(false);
   readonly colorPalette = [
     '#4F46E5', '#7C3AED', '#DB2777', '#DC2626',
     '#D97706', '#059669', '#0891B2', '#1D4ED8'
@@ -49,11 +53,10 @@ export class BoardsPageComponent implements OnInit {
     this.workspaceService.getWorkspacesByUser(this.authService.getCurrentUserId()).subscribe({
       next: (workspaces) => {
         this.workspaces.set(workspaces || []);
-        workspaces.forEach(ws => {
-                                                    this.boardService.getBoardsByWorkspaceId(ws.id).subscribe({
-                                                      next: (boards) => {
-                                                        const map = new Map(this.boardsByWorkspace());
-                                                        map.set(ws.id, boards || []);
+        workspaces.forEach(ws => {this.boardService.getBoardsByWorkspaceId(ws.id).subscribe({
+          next: (boards) => {
+            const map = new Map(this.boardsByWorkspace());
+              map.set(ws.id, boards || []);
               this.boardsByWorkspace.set(map);
             },
             error: (err) => console.error(`Erreur boards workspace ${ws.id}`, err)
@@ -71,6 +74,8 @@ export class BoardsPageComponent implements OnInit {
       next: (updated) => this.replaceBoard(updated)
     });
   }
+ //creer un workspace
+
 
   //Menu contextuel
   openMenu(boardId: number, event: MouseEvent) {
@@ -82,6 +87,11 @@ export class BoardsPageComponent implements OnInit {
 
   closeMenu() {
     this.activeMenuBoardId.set(null);
+  }
+
+  openCreateModalFromTopbar() {
+    const firstWs = this.workspaces()[0];
+    if (firstWs) this.openCreateModal(firstWs.id);
   }
 
   //  Créer un board
@@ -201,5 +211,42 @@ export class BoardsPageComponent implements OnInit {
 
   getBoardCount(wsId: number): number {
     return (this.boardsByWorkspace().get(wsId) ?? []).length;
+  }
+
+  openWorkspaceModal() {
+    this.newWorkspaceName.set('');
+    this.newWorkspaceNameError.set(false);
+    this.showWorkspaceModal.set(true);
+  }
+
+  closeWorkspaceModal() {
+    this.showWorkspaceModal.set(false);
+  }
+
+  saveWorkspace() {
+    const name = this.newWorkspaceName().trim();
+    if (!name) {
+      this.newWorkspaceNameError.set(true);
+      return;
+    }
+
+    const dto: WorkspaceDTO = {
+      id: 0,
+      name,
+      ownerId: this.authService.getCurrentUserId()
+    };
+
+    this.workspaceService.createWorkspace(dto).subscribe({
+      next: (created) => {
+        this.workspaces.update(list => [...list, created]);
+        this.boardsByWorkspace.update(map => {
+          const newMap = new Map(map);
+          newMap.set(created.id, []);
+          return newMap;
+        });
+        this.closeWorkspaceModal();
+      },
+      error: (err) => console.error('Erreur création workspace', err)
+    });
   }
 }
