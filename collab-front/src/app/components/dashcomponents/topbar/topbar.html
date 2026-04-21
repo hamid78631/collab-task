@@ -19,10 +19,61 @@
             (change)="sortByChange.emit($any($event.target).value)">
       <option value="title">Nom A–Z</option>
     </select>
-    <div class="ico-btn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-      <div class="ndot"></div>
+
+    <!-- Cloche notifications -->
+    <div class="notif-wrapper">
+      <div class="ico-btn" (click)="toggleDropdown()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 01-3.46 0"/>
+        </svg>
+        @if(notifications().length > 0) {
+          <span class="nbadge">{{ notifications().length }}</span>
+        }
+      </div>
+
+      @if(showDropdown()) {
+        <div class="notif-dropdown">
+          <div class="notif-header">
+            <span class="notif-title">Notifications</span>
+            <span class="notif-count">{{ notifications().length }} non lue{{ notifications().length > 1 ? 's' : '' }}</span>
+          </div>
+
+          <div class="notif-list">
+            @for(notif of notifications(); track notif.id) {
+              <div class="notif-item" (click)="markAsRead(notif)">
+                <div class="notif-icon" [class]="'notif-icon--' + notif.type.toLowerCase()">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                  </svg>
+                </div>
+                <div class="notif-body">
+                  <p class="notif-msg">{{ notif.message }}</p>
+                  <span class="notif-meta">{{ notif.createdAt | date:'dd MMM · HH:mm' }}</span>
+                </div>
+                <div class="notif-actions">
+                  @if(notif.boardId) {
+                    <a class="notif-see-btn"
+                       [routerLink]="['/board', notif.boardId]"
+                       (click)="$event.stopPropagation(); markAsRead(notif)"
+                       title="Voir le board">
+                      Voir
+                    </a>
+                  }
+                  <div class="notif-unread-dot"></div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="notif-footer">
+            Cliquer sur une notification pour la marquer comme lue
+          </div>
+        </div>
+      }
     </div>
+
     <button class="btn-logout" (click)="logout()" title="Se déconnecter">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
