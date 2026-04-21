@@ -145,7 +145,9 @@ export class BoardView implements OnInit {
   addTask(colId: number) {
     const title = this.newTaskTitle().trim();
     if (!title) return;
-    const task: TaskDTO = { title, description: '', priority: 'MEDIUM', taskColumnId: colId };
+    const task: TaskDTO = {
+      title, description: '', priority: 'MEDIUM', taskColumnId: colId , assigneeId : this.authService.getCurrentUserId()
+      };
     this.taskService.createTask(task).subscribe({
       next: (created) => {
         const map = new Map(this.tasksByColumn());

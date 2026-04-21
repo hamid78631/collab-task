@@ -4,6 +4,7 @@ export interface TaskDTO {
   description: string;
   priority: 'HIGH' | 'MEDIUM' | 'LOW';
   taskColumnId?: number;
+  boardId?: number;
   assigneeId?: number;
   createdAt?: string;
   updatedAt?: string;

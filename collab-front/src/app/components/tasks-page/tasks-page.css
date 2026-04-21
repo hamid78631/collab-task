@@ -415,6 +415,20 @@
   border-top: 0.5px solid rgba(9, 30, 66, 0.08);
 }
 
+.btn-board {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid #4F46E5;
+  background: none;
+  font-size: 13px;
+  color: #4F46E5;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+  margin-right: auto;
+}
+.btn-board:hover { background: #4F46E5; color: white; }
+
 .btn-cancel {
   padding: 7px 16px;
   border-radius: 8px;

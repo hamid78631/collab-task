@@ -131,6 +131,9 @@
         </select>
       </div>
       <div class="modal-footer">
+        @if(selectedTask()?.boardId) {
+          <a class="btn-board" [routerLink]="['/board', selectedTask()!.boardId]">Voir le board</a>
+        }
         <button class="btn-cancel" (click)="closeDetailModal()">Annuler</button>
         <button class="btn-confirm" (click)="saveTask()" [disabled]="!newTitle().trim()">Enregistrer</button>
       </div>
