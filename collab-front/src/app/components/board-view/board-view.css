@@ -119,6 +119,172 @@
   opacity: 0.85;
 }
 
+/* ─── Notifications topbar ───────────────────────────────── */
+.notif-wrapper {
+  position: relative;
+}
+
+.notif-bell {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: #f4f5f7;
+  border: 0.5px solid rgba(9, 30, 66, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #5e6c84;
+  position: relative;
+  transition: background 0.12s, color 0.12s;
+}
+
+.notif-bell:hover {
+  background: #eef2ff;
+  color: #4F46E5;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 99px;
+  background: #ef4444;
+  color: white;
+  font-size: 9.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border: 2px solid white;
+  pointer-events: none;
+}
+
+.notif-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  background: white;
+  border: 0.5px solid rgba(9, 30, 66, 0.15);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(9, 30, 66, 0.14);
+  z-index: 200;
+  overflow: hidden;
+  animation: notifDropIn 0.16s ease;
+}
+
+@keyframes notifDropIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.notif-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 10px;
+  border-bottom: 0.5px solid rgba(9, 30, 66, 0.1);
+}
+
+.notif-dropdown-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #172b4d;
+}
+
+.notif-dropdown-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  background: #ef4444;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.notif-dropdown-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notif-dropdown-list::-webkit-scrollbar { width: 3px; }
+.notif-dropdown-list::-webkit-scrollbar-thumb { background: rgba(9,30,66,0.15); border-radius: 4px; }
+
+.notif-empty {
+  padding: 20px 14px;
+  font-size: 12.5px;
+  color: #8993a4;
+  text-align: center;
+}
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 14px;
+  cursor: pointer;
+  border-bottom: 0.5px solid #f4f5f7;
+  transition: background 0.1s;
+}
+
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #f8f9fa; }
+
+.notif-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.notif-icon--task_created  { background: #f0fdf4; color: #16a34a; }
+.notif-icon--task_assigned { background: #eff6ff; color: #2563eb; }
+.notif-icon--comment       { background: #f0fdf4; color: #16a34a; }
+
+.notif-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-msg {
+  font-size: 12px;
+  font-weight: 500;
+  color: #172b4d;
+  line-height: 1.4;
+  margin: 0 0 3px;
+}
+
+.notif-meta {
+  font-size: 11px;
+  color: #8993a4;
+}
+
+.notif-unread-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4F46E5;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.notif-dropdown-footer {
+  padding: 9px 14px;
+  font-size: 11px;
+  color: #8993a4;
+  text-align: center;
+  background: #f8f9fa;
+  border-top: 0.5px solid rgba(9,30,66,0.08);
+}
+
 /* ─── Kanban wrapper ─────────────────────────────────────── */
 .kanban-wrapper {
   flex: 1;

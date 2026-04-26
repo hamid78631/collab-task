@@ -6,10 +6,12 @@ import { TaskColumnService } from '../../services/task-column';
 import { TaskService } from '../../services/task';
 import { CommentService } from '../../services/comment';
 import { AuthService } from '../../services/auth';
+import { NotificationsService } from '../../services/notifications';
 import { BoardDTO } from '../../models/board.model';
 import { TaskColumnDTO } from '../../models/taskColumn.model';
 import { TaskDTO } from '../../models/task.model';
 import { CommentDTO } from '../../models/comment.model';
+import { NotificationDTO } from '../../models/notification.model';
 
 @Component({
   selector: 'app-board-view',
@@ -25,6 +27,7 @@ export class BoardView implements OnInit {
   private taskService = inject(TaskService);
   private commentService = inject(CommentService);
   private authService = inject(AuthService);
+  private notificationsService = inject(NotificationsService);
 
   board = signal<BoardDTO | null>(null);
   columns = signal<TaskColumnDTO[]>([]);
@@ -47,6 +50,10 @@ export class BoardView implements OnInit {
   dragSourceColumnId = signal<number | null>(null);
   dragOverColumnId = signal<number | null>(null);
 
+  // Notifications
+  notifications = signal<NotificationDTO[]>([]);
+  showNotifDropdown = signal(false);
+
   // Modal détail tâche
   selectedTask = signal<TaskDTO | null>(null);
   taskComments = signal<CommentDTO[]>([]);
@@ -57,6 +64,12 @@ export class BoardView implements OnInit {
   modalDirty = signal(false);
 
   ngOnInit() {
+    const userId = this.authService.getCurrentUserId();
+    this.notificationsService.getUnreadNotification(userId).subscribe({
+      next: (data) => this.notifications.set(data || []),
+      error: (err) => console.error('Erreur notifications', err)
+    });
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.boardService.getBoard(id).subscribe({
       next: (board) => this.board.set(board),
@@ -79,6 +92,19 @@ export class BoardView implements OnInit {
         this.tasksByColumn.set(map);
       },
       error: (err) => console.error(`Erreur chargement tâches colonne ${columnId}`, err)
+    });
+  }
+
+  // ── Notifications ─────────────────────────────────────────────────
+
+  toggleNotifDropdown() {
+    this.showNotifDropdown.set(!this.showNotifDropdown());
+  }
+
+  markNotifAsRead(notif: NotificationDTO) {
+    this.notificationsService.markedRead(notif.id!).subscribe({
+      next: () => this.notifications.set(this.notifications().filter(n => n.id !== notif.id)),
+      error: (err) => console.error('Erreur markAsRead', err)
     });
   }
 
@@ -152,6 +178,17 @@ export class BoardView implements OnInit {
         map.set(colId, [...(map.get(colId) ?? []), created]);
         this.tasksByColumn.set(map);
         this.addingTaskColumnId.set(null);
+
+        const userId = this.authService.getCurrentUserId();
+        const boardTitle = this.board()?.title ?? '';
+        const boardId = this.board()?.id;
+        this.notificationsService.createNotification(
+          userId,
+          `Tâche "${title}" ajoutée dans le board "${boardTitle}"`,
+          'TASK_CREATED',
+          created.id,
+          boardId
+        ).subscribe({ error: (err) => console.error('Erreur notification', err) });
       },
       error: (err) => console.error('Erreur création tâche', err)
     });

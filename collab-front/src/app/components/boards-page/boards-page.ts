@@ -1,15 +1,18 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { BoardService } from '../../services/board';
 import { WorkspaceService } from '../../services/workspace';
 import { AuthService } from '../../services/auth';
+import { NotificationsService } from '../../services/notifications';
 import { BoardDTO } from '../../models/board.model';
 import { WorkspaceDTO } from '../../models/workspace.model';
+import { NotificationDTO } from '../../models/notification.model';
 
 @Component({
   selector: 'app-boards-page',
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, DatePipe],
   templateUrl: './boards-page.html',
   styleUrl: './boards-page.css',
 })
@@ -18,6 +21,7 @@ export class BoardsPageComponent implements OnInit {
   private boardService = inject(BoardService);
   private workspaceService = inject(WorkspaceService);
   private authService = inject(AuthService);
+  private notificationsService = inject(NotificationsService);
 
   workspaces = signal<WorkspaceDTO[]>([]);
   boardsByWorkspace = signal<Map<number, BoardDTO[]>>(new Map());
@@ -39,6 +43,10 @@ export class BoardsPageComponent implements OnInit {
 
   // Filtre favoris
   showFavoritesOnly = signal(false);
+
+  // Notifications
+  notifications = signal<NotificationDTO[]>([]);
+  showNotifDropdown = signal(false);
  //Modal de création de
   showWorkspaceModal = signal(false);
   newWorkspaceName = signal('');
@@ -50,6 +58,10 @@ export class BoardsPageComponent implements OnInit {
 
   ngOnInit() {
     this.loadWorkspaces();
+    this.notificationsService.getUnreadNotification(this.authService.getCurrentUserId()).subscribe({
+      next: (data) => this.notifications.set(data || []),
+      error: (err) => console.error('Erreur notifications', err)
+    });
   }
 
   private loadWorkspaces() {
@@ -67,6 +79,20 @@ export class BoardsPageComponent implements OnInit {
         });
       },
       error: (err) => console.error('Erreur de chargement des workspaces', err)
+    });
+  }
+
+  // ── Notifications ─────────────────────────────────────────────────
+
+  toggleNotifDropdown(event: MouseEvent) {
+    event.stopPropagation();
+    this.showNotifDropdown.set(!this.showNotifDropdown());
+  }
+
+  markNotifAsRead(notif: NotificationDTO) {
+    this.notificationsService.markedRead(notif.id!).subscribe({
+      next: () => this.notifications.set(this.notifications().filter(n => n.id !== notif.id)),
+      error: (err) => console.error('Erreur markAsRead', err)
     });
   }
 

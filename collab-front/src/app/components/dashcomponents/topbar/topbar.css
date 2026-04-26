@@ -222,6 +222,7 @@
 }
 
 .notif-icon--task_assigned { background: #eff6ff; color: #2563eb; }
+.notif-icon--task_created  { background: #f0fdf4; color: #16a34a; }
 .notif-icon--comment       { background: #f0fdf4; color: #16a34a; }
 .notif-icon--mention       { background: #fdf4ff; color: #9333ea; }
 

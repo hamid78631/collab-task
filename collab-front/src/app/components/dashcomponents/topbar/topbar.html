@@ -43,10 +43,16 @@
             @for(notif of notifications(); track notif.id) {
               <div class="notif-item" (click)="markAsRead(notif)">
                 <div class="notif-icon" [class]="'notif-icon--' + notif.type.toLowerCase()">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-                    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                    <path d="M13.73 21a2 2 0 01-3.46 0"/>
-                  </svg>
+                  @if(notif.type.toLowerCase() === 'task_created') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  } @else {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                      <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                      <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                    </svg>
+                  }
                 </div>
                 <div class="notif-body">
                   <p class="notif-msg">{{ notif.message }}</p>

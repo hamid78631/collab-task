@@ -45,7 +45,7 @@
   <div class="main">
 
     <!-- Topbar -->
-    <header class="topbar">
+    <header class="topbar" (click)="showNotifDropdown.set(false)">
       <span class="topbar-title">Mes boards</span>
       <div class="topbar-actions">
         <button
@@ -55,6 +55,53 @@
           title="Afficher uniquement les favoris">
           ★ Favoris
         </button>
+
+        <!-- Cloche notifications -->
+        <div class="notif-wrapper">
+          <div class="notif-bell" (click)="toggleNotifDropdown($event)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 01-3.46 0"/>
+            </svg>
+            @if(notifications().length > 0) {
+              <span class="notif-badge">{{ notifications().length }}</span>
+            }
+          </div>
+
+          @if(showNotifDropdown()) {
+            <div class="notif-dropdown" (click)="$event.stopPropagation()">
+              <div class="notif-dropdown-header">
+                <span class="notif-dropdown-title">Notifications</span>
+                @if(notifications().length > 0) {
+                  <span class="notif-dropdown-count">{{ notifications().length }} non lue{{ notifications().length > 1 ? 's' : '' }}</span>
+                }
+              </div>
+              <div class="notif-dropdown-list">
+                @if(notifications().length === 0) {
+                  <p class="notif-empty">Aucune notification</p>
+                }
+                @for(notif of notifications(); track notif.id) {
+                  <div class="notif-item" (click)="markNotifAsRead(notif)">
+                    <div class="notif-icon notif-icon--{{ notif.type.toLowerCase() }}">
+                      @if(notif.type.toLowerCase() === 'task_created') {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      } @else {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                      }
+                    </div>
+                    <div class="notif-body">
+                      <p class="notif-msg">{{ notif.message }}</p>
+                      <span class="notif-meta">{{ notif.createdAt | date:'dd MMM · HH:mm' }}</span>
+                    </div>
+                    <div class="notif-unread-dot"></div>
+                  </div>
+                }
+              </div>
+              <div class="notif-dropdown-footer">Cliquer pour marquer comme lue</div>
+            </div>
+          }
+        </div>
+
         <button class="btn-invite" (click)="openCreateModalFromTopbar()" [disabled]="workspaces().length === 0">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:5px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nouveau Board
