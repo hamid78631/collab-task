@@ -310,6 +310,29 @@
   transform: translateY(-1px);
 }
 
+.btn-avatar {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  background: #4F46E5;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+
+.btn-avatar:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
 .btn-logout {
   width: 33px; height: 33px;
   display: flex;
