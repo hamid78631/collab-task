@@ -25,10 +25,14 @@ export class TopbarComponent implements OnInit {
   @Output() searchFocusedChange = new EventEmitter<boolean>();
 
   notifications = signal<NotificationDTO[]>([]);
-  showDropdown = signal(false) ;
+  showDropdown = signal(false);
 
+  get userName(): string { return localStorage.getItem('userName') ?? ''; }
+  get initials(): string {
+    return this.userName.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || 'U';
+  }
 
-  constructor(private authService: AuthService , private notification : NotificationsService) {}
+  constructor(private authService: AuthService, private notification: NotificationsService) {}
 
   logout() {
     this.authService.logout();

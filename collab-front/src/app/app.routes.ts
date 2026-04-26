@@ -6,6 +6,7 @@ import { authGuard } from './guards/auth.gaurd-guard';
 import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
 import { TaskPageComponent } from './components/tasks-page/tasks-page';
+import { ProfilePageComponent } from './components/profile-page/profile-page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -14,7 +15,8 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: 'board/:id', component: BoardView, canActivate: [authGuard] },
   { path: 'boards', component: BoardsPageComponent, canActivate: [authGuard] },
-  {path : 'tasks' , component : TaskPageComponent ,  canActivate: [authGuard] },
+  { path: 'tasks', component: TaskPageComponent, canActivate: [authGuard] },
+  { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login' },
 
 ];
