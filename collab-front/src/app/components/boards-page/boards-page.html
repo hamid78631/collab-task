@@ -3,9 +3,9 @@
   <!-- ─── Sidebar -->
   <aside class="sidebar">
 
-    <div class="sidebar-logo">
+    <div class="sidebar-logo"[routerLink]="['/dashboard']">
       <div class="logo-mark">C</div>
-      <span class="logo-name">Collab</span>
+      <span class="logo-name" >Collab</span>
     </div>
 
     <div class="sidebar-nav">
@@ -48,6 +48,13 @@
     <header class="topbar">
       <span class="topbar-title">Mes boards</span>
       <div class="topbar-actions">
+        <button
+          class="btn-filter"
+          [class.active]="showFavoritesOnly()"
+          (click)="showFavoritesOnly.set(!showFavoritesOnly())"
+          title="Afficher uniquement les favoris">
+          ★ Favoris
+        </button>
         <button class="btn-invite" (click)="openCreateModalFromTopbar()" [disabled]="workspaces().length === 0">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:5px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Nouveau Board
@@ -59,6 +66,7 @@
     <div class="content">
 
       @for(ws of workspaces(); track ws.id){
+        @if(!showFavoritesOnly() || hasVisibleBoards(ws.id)){
         <section>
           <div class="section-header">
             <div class="ws-header">
@@ -70,7 +78,7 @@
 
           <div class="boards-grid">
 
-            @for(board of boardsByWorkspace().get(ws.id) ?? []; track board.id){
+            @for(board of getVisibleBoards(ws.id); track board.id){
               <div class="board-card" [routerLink]="activeMenuBoardId() === board.id ? null : ['/board', board.id]">
                 <div class="accent-bar" [style.background]="board.backgroundColor || '#4F46E5'"></div>
                 <div class="card-body">
@@ -119,13 +127,16 @@
             }
 
             <!-- Carte "Créer un board" -->
-            <div class="board-card board-card--new" (click)="openCreateModal(ws.id)">
-              <div class="new-icon">+</div>
-              <span class="new-label" >Créer un board</span>
-            </div>
+            @if(!showFavoritesOnly()){
+              <div class="board-card board-card--new" (click)="openCreateModal(ws.id)">
+                <div class="new-icon">+</div>
+                <span class="new-label">Créer un board</span>
+              </div>
+            }
 
           </div>
         </section>
+        }
       }
 
     </div>

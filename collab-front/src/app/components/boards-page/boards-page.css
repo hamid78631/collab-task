@@ -170,6 +170,31 @@
 
 .btn-invite:hover { opacity: 0.88; }
 
+.btn-filter {
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: none;
+  color: #6b778c;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1.5px solid rgba(9, 30, 66, 0.18);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.btn-filter:hover {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fcd34d;
+}
+
+.btn-filter.active {
+  background: #fef3c7;
+  color: #d97706;
+  border-color: #fcd34d;
+  font-weight: 600;
+}
+
 /* ─── Content area ────────────────────────────── */
 .content {
   padding: 2rem 1.75rem;

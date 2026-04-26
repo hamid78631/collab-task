@@ -36,6 +36,9 @@ export class BoardsPageComponent implements OnInit {
 
   // Confirmation de suppression
   confirmDeleteBoardId = signal<number | null>(null);
+
+  // Filtre favoris
+  showFavoritesOnly = signal(false);
  //Modal de création de
   showWorkspaceModal = signal(false);
   newWorkspaceName = signal('');
@@ -211,6 +214,15 @@ export class BoardsPageComponent implements OnInit {
 
   getBoardCount(wsId: number): number {
     return (this.boardsByWorkspace().get(wsId) ?? []).length;
+  }
+
+  getVisibleBoards(wsId: number): BoardDTO[] {
+    const boards = this.boardsByWorkspace().get(wsId) ?? [];
+    return this.showFavoritesOnly() ? boards.filter(b => b.isFavorite) : boards;
+  }
+
+  hasVisibleBoards(wsId: number): boolean {
+    return this.getVisibleBoards(wsId).length > 0;
   }
 
   openWorkspaceModal() {
