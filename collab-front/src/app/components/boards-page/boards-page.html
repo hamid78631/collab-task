@@ -121,6 +121,11 @@
               <span class="ws-name">{{ ws.name }}</span>
               <span class="ws-count">{{ getBoardCount(ws.id) }} boards</span>
             </div>
+            <button class="btn-members" (click)="openMembersModal(ws.id) ; $event.stopPropagation()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17
+  21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0
+  7.75"/></svg>
+            </button>
           </div>
 
           <div class="boards-grid">
@@ -258,6 +263,69 @@
         <button class="btn-cancel" (click)="closeWorkspaceModal()">Annuler</button>
         <button class="btn-confirm" (click)="saveWorkspace()">Créer</button>
       </div>
+    </div>
+  </div>
+}
+
+<!-- ─── Modal Membres workspace ──────────────── -->
+@if(showMembersModal()){
+  <div class="modal-backdrop" (click)="closeMembersModal()">
+    <div class="modal modal--members" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <span class="modal-title">Membres du workspace</span>
+        <button class="modal-close" (click)="closeMembersModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+
+        <label class="modal-field-label">Membres actuels</label>
+        @if(members().length === 0){
+          <p class="members-empty">Aucun membre pour l'instant.</p>
+        }
+        @for(member of members(); track member.id){
+          <div class="member-row">
+            <div class="member-avatar">{{ member.name.charAt(0).toUpperCase() }}</div>
+            <div class="member-info">
+              <span class="member-name">{{ member.name }}</span>
+              <span class="member-email">{{ member.email }}</span>
+            </div>
+            <button class="btn-remove-member" (click)="removeMember(member.id)">Retirer</button>
+          </div>
+        }
+
+        <label class="modal-field-label" style="margin-top:1.2rem;">Ajouter un membre</label>
+        <div class="member-search-row">
+          <input
+            class="modal-input"
+            type="text"
+            placeholder="Rechercher par nom ou email…"
+            [ngModel]="memberSearchQuery()"
+            (ngModelChange)="onMemberSearch($event)"
+          />
+        </div>
+
+        @if(memberSearchResults().length > 0){
+          <div class="member-search-results">
+            @for(user of memberSearchResults(); track user.id){
+              <div class="member-result-row" (click)="addMember(user.id!)">
+                <div class="member-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+                <div class="member-info">
+                  <span class="member-name">{{ user.name }}</span>
+                  <span class="member-email">{{ user.email }}</span>
+                </div>
+                <span class="member-add-hint">+ Ajouter</span>
+              </div>
+            }
+          </div>
+        }
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeMembersModal()">Fermer</button>
+      </div>
+
     </div>
   </div>
 }

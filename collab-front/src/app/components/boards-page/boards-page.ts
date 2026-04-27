@@ -9,6 +9,8 @@ import { NotificationsService } from '../../services/notifications';
 import { BoardDTO } from '../../models/board.model';
 import { WorkspaceDTO } from '../../models/workspace.model';
 import { NotificationDTO } from '../../models/notification.model';
+import { UserDTO } from '../../models/user.model';
+import { UserService } from '../../services/user';
 
 @Component({
   selector: 'app-boards-page',
@@ -55,6 +57,17 @@ export class BoardsPageComponent implements OnInit {
     '#4F46E5', '#7C3AED', '#DB2777', '#DC2626',
     '#D97706', '#059669', '#0891B2', '#1D4ED8'
   ];
+
+
+//modal members
+showMembersModal = signal(false);
+membersWorkspaceId = signal<number | null>(null);
+members = signal<UserDTO[]>([]);
+
+memberSearchQuery = signal('');
+memberSearchResults = signal<UserDTO[]>([]);
+
+  private userService = inject(UserService);
 
   ngOnInit() {
     this.loadWorkspaces();
@@ -285,6 +298,60 @@ export class BoardsPageComponent implements OnInit {
         this.closeWorkspaceModal();
       },
       error: (err) => console.error('Erreur création workspace', err)
+    });
+  }
+
+  openMembersModal(wsId: number) {
+    this.membersWorkspaceId.set(wsId);
+    this.members.set([]);
+    this.memberSearchQuery.set('');
+    this.memberSearchResults.set([]);
+    this.showMembersModal.set(true);
+    this.workspaceService.getWorkspaceMembers(wsId).subscribe({
+      next: (data) => this.members.set(data || []),
+      error: (err) => console.error('Erreur chargement membres', err)
+    });
+  }
+
+  closeMembersModal() {
+    this.showMembersModal.set(false);
+    this.membersWorkspaceId.set(null);
+  }
+
+  onMemberSearch(query: string) {
+    this.memberSearchQuery.set(query);
+    if (!query.trim()) {
+      this.memberSearchResults.set([]);
+      return;
+    }
+    this.userService.searchUser(query, query).subscribe({
+      next: (users) => {
+        const memberIds = new Set(this.members().map(m => m.id));
+        this.memberSearchResults.set((users || []).filter(u => !memberIds.has(u.id)));
+      },
+      error: (err) => console.error('Erreur recherche utilisateurs', err)
+    });
+  }
+
+  addMember(userId: number) {
+    const wsId = this.membersWorkspaceId()!;
+    this.workspaceService.addMemberToWorkspace(wsId, userId).subscribe({
+      next: () => {
+        const user = this.memberSearchResults().find(u => u.id === userId);
+        if (user) {
+          this.members.update(list => [...list, user]);
+          this.memberSearchResults.update(list => list.filter(u => u.id !== userId));
+        }
+      },
+      error: (err) => console.error('Erreur ajout membre', err)
+    });
+  }
+
+  removeMember(userId: number) {
+    const wsId = this.membersWorkspaceId()!;
+    this.workspaceService.removeMemberFromWorkspace(wsId, userId).subscribe({
+      next: () => this.members.update(list => list.filter(m => m.id !== userId)),
+      error: (err) => console.error('Erreur retrait membre', err)
     });
   }
 }
