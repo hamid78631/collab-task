@@ -85,6 +85,8 @@
                     <div class="notif-icon notif-icon--{{ notif.type.toLowerCase() }}">
                       @if(notif.type.toLowerCase() === 'task_created') {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      } @else if(notif.type.toLowerCase() === 'member_added') {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                       } @else {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
                       }
@@ -92,6 +94,9 @@
                     <div class="notif-body">
                       <p class="notif-msg">{{ notif.message }}</p>
                       <span class="notif-meta">{{ notif.createdAt | date:'dd MMM · HH:mm' }}</span>
+                      @if(notif.type.toLowerCase() === 'member_added') {
+                        <a class="notif-link-action" [routerLink]="['/boards']" (click)="markNotifAsRead(notif); $event.stopPropagation()">Voir le workspace →</a>
+                      }
                     </div>
                     <div class="notif-unread-dot"></div>
                   </div>
@@ -290,7 +295,7 @@
               <span class="member-name">{{ member.name }}</span>
               <span class="member-email">{{ member.email }}</span>
             </div>
-            <button class="btn-remove-member" (click)="removeMember(member.id)">Retirer</button>
+            <button class="btn-remove-member" (click)="removeMember(member.id!)">Retirer</button>
           </div>
         }
 

@@ -47,6 +47,11 @@
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                       <polyline points="20 6 9 17 4 12"/>
                     </svg>
+                  } @else if(notif.type.toLowerCase() === 'member_added') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
                   } @else {
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
                       <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -59,7 +64,14 @@
                   <span class="notif-meta">{{ notif.createdAt | date:'dd MMM · HH:mm' }}</span>
                 </div>
                 <div class="notif-actions">
-                  @if(notif.boardId) {
+                  @if(notif.type.toLowerCase() === 'member_added') {
+                    <a class="notif-see-btn"
+                       [routerLink]="['/boards']"
+                       (click)="$event.stopPropagation(); markAsRead(notif)"
+                       title="Voir le workspace">
+                      Voir le workspace
+                    </a>
+                  } @else if(notif.boardId) {
                     <a class="notif-see-btn"
                        [routerLink]="['/board', notif.boardId]"
                        (click)="$event.stopPropagation(); markAsRead(notif)"

@@ -1,14 +1,15 @@
 /* ─── Layout ──────────────────────────────────── */
 :host {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   font-family: 'Inter', sans-serif;
 }
 
 .layout {
   display: flex;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   background: #f4f5f7;
 }
 
@@ -862,7 +863,18 @@
 
 .notif-icon--task_created  { background: #f0fdf4; color: #16a34a; }
 .notif-icon--task_assigned { background: #eff6ff; color: #2563eb; }
+.notif-icon--member_added  { background: #f5f3ff; color: #7c3aed; }
 .notif-icon--comment       { background: #f0fdf4; color: #16a34a; }
+
+.notif-link-action {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #7c3aed;
+  text-decoration: none;
+}
+.notif-link-action:hover { text-decoration: underline; }
 
 .notif-body { flex: 1; min-width: 0; }
 
