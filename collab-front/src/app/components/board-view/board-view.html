@@ -68,10 +68,13 @@
     </div>
 
     <div class="avatar-stack">
-      <!-- Remplacer par les vrais membres du board -->
-      <div class="avatar-sm" style="background: #4F46E5;">H</div>
-      <div class="avatar-sm" style="background: #0891B2;">L</div>
-      <div class="avatar-sm" style="background: #16A34A;">M</div>
+      @for(member of members() ; track member.id; let i = $index) {
+        <div class="avatar-sm" [style.background]="getMemberColor(i)" [title] = "member.name">
+          {{member.name.charAt(0).toUpperCase()}}
+        </div>
+
+      }
+
     </div>
     <button class="btn-invite">+ Inviter</button>
   </div>
@@ -152,12 +155,12 @@
             </div>
             <div class="mini-avatars">
               @if(task.assigneeId) {
-                <div
-                  class="mini-av"
-                  [style.background]="getAssigneeColor(task.assigneeId)"
-                  [title]="'Assigné #' + task.assigneeId">
-                  U
-                </div>
+              <div
+                class="mini-av"
+                [style.background]="getAssigneeColor(task.assigneeId)"
+                [title]="getMemberByAssigneeId(task.assigneeId)?.name ?? 'Inconnu'">
+                {{ getMemberByAssigneeId(task.assigneeId)?.name?.charAt(0)?.toUpperCase() ?? '?' }}
+              </div>
               }
             </div>
           </div>

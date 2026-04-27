@@ -12,6 +12,8 @@ import { TaskColumnDTO } from '../../models/taskColumn.model';
 import { TaskDTO } from '../../models/task.model';
 import { CommentDTO } from '../../models/comment.model';
 import { NotificationDTO } from '../../models/notification.model';
+import { WorkspaceService } from '../../services/workspace';
+import { UserDTO } from '../../models/user.model';
 
 @Component({
   selector: 'app-board-view',
@@ -28,7 +30,9 @@ export class BoardView implements OnInit {
   private commentService = inject(CommentService);
   private authService = inject(AuthService);
   private notificationsService = inject(NotificationsService);
+  private workspaceService = inject(WorkspaceService);
 
+  members = signal<UserDTO[]>([]);
   board = signal<BoardDTO | null>(null);
   columns = signal<TaskColumnDTO[]>([]);
   tasksByColumn = signal<Map<number, TaskDTO[]>>(new Map());
@@ -63,6 +67,11 @@ export class BoardView implements OnInit {
   newCommentContent = signal('');
   modalDirty = signal(false);
 
+readonly memberColors = [
+    '#4F46E5', '#0891B2', '#16A34A',
+    '#DB2777', '#D97706', '#7C3AED'
+  ];
+
   ngOnInit() {
     const userId = this.authService.getCurrentUserId();
     this.notificationsService.getUnreadNotification(userId).subscribe({
@@ -72,9 +81,16 @@ export class BoardView implements OnInit {
 
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.boardService.getBoard(id).subscribe({
-      next: (board) => this.board.set(board),
+      next: (board) => {
+        this.board.set(board);
+        this.workspaceService.getWorkspaceMembers(board.workspaceId).subscribe({
+          next : (members ) => this.members.set(members || []),
+          error : (err) => console.error('Erreur membres' , err)
+          })
+        },
       error: (err) => console.error('Erreur chargement board', err)
     });
+
     this.columnService.getAllTaskColumnsByBoardId(id).subscribe({
       next: (cols) => {
         this.columns.set(cols || []);
@@ -376,4 +392,12 @@ export class BoardView implements OnInit {
     const colors = ['#4F46E5', '#0891B2', '#16A34A', '#D97706', '#DC2626', '#7C3AED'];
     return colors[assigneeId % colors.length];
   }
+ getMemberByAssigneeId(assigneeId: number): UserDTO | undefined {
+    return this.members().find(m => m.id === assigneeId);
+  }
+
+  // récupérer la couleur du membre
+  getMemberColor(index : number) : string {
+    return this.membersColors[index % this.memberColors.length] ;
+    }
 }
