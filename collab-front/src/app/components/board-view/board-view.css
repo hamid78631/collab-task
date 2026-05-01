@@ -468,6 +468,19 @@
   text-overflow: ellipsis;
 }
 
+.task-due {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  color: #5e6c84;
+  margin-top: 5px;
+}
+.task-due--overdue {
+  color: #DC2626;
+  font-weight: 600;
+}
+
 /* Pied de carte : tags + avatars */
 .task-footer {
   display: flex;

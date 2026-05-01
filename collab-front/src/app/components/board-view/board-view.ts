@@ -67,7 +67,7 @@ export class BoardView implements OnInit {
   modalAssigneeId = signal<number | null>(null);
   newCommentContent = signal('');
   modalDirty = signal(false);
-
+  modalDueDate = signal('')
 readonly memberColors = [
     '#4F46E5', '#0891B2', '#16A34A',
     '#DB2777', '#D97706', '#7C3AED'
@@ -286,6 +286,7 @@ readonly memberColors = [
     this.modalAssigneeId.set(task.assigneeId ?? null);
     this.newCommentContent.set('');
     this.modalDirty.set(false);
+    this.modalDueDate.set(task.dueDate || '');
     this.taskComments.set([]);
     this.commentService.getCommentsByTask(task.id!).subscribe({
       next: (comments) => this.taskComments.set(comments || []),
@@ -301,7 +302,8 @@ readonly memberColors = [
       title: this.modalTitle().trim(),
       description: this.modalDesc(),
       priority: this.modalPriority(),
-      assigneeId: this.modalAssigneeId() ?? undefined
+      assigneeId: this.modalAssigneeId() ?? undefined,
+      dueDate : this.modalDueDate() || undefined
     };
     this.taskService.updateTask(task.id!, updated).subscribe({
       next: (result) => {
@@ -364,6 +366,15 @@ readonly memberColors = [
   formatDate(dateStr?: string): string {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+
+  formatDueDate(dateStr?: string): string {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+  }
+
+  today(): string {
+    return new Date().toISOString().split('T')[0];
   }
 
   // Couleur dérivée de la position de la colonne dans le board

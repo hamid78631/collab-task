@@ -148,6 +148,12 @@
           <div class="task-desc">{{ task.description }}</div>
           }
 
+          @if(task.dueDate) {
+          <div class="task-due" [class.task-due--overdue]="task.dueDate < today()">
+            📅 {{ formatDueDate(task.dueDate) }}
+          </div>
+          }
+
           <!-- Pied de carte : tags + assigné -->
           <div class="task-footer">
             <div class="task-tags">
@@ -267,6 +273,15 @@
           }
         </select>
       </div>
+      <!-- Date d'échéance -->
+      <div class="modal-field">
+        <label class="modal-label">Date d'échéance</label>
+        <input
+          type="date"
+          class="modal-select"
+          [ngModel]="modalDueDate()"
+          (ngModelChange)="modalDueDate.set($event); modalDirty.set(true)" />
+      </div>
 
       <!-- Description -->
       <div class="modal-field">
@@ -284,7 +299,7 @@
       <div class="modal-save-row">
         <button class="btn-save" (click)="saveTaskModal()" [disabled]="!modalTitle().trim()">Enregistrer les modifications</button>
         @if(modalDirty()) {
-        <button class="btn-discard" (click)="openTaskModal(selectedTask()!)">Annuler</button>
+        <button class="btn-discard" (click)="(selectedTask()!)">Annuler</button>
         }
       </div>
 

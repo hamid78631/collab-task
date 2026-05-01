@@ -8,4 +8,5 @@ export interface TaskDTO {
   createdAt?: string;
   updatedAt?: string;
   position?: number;
+  dueDate?: string;
 }
