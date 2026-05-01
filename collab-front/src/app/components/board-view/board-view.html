@@ -254,6 +254,20 @@
         </div>
       </div>
 
+      <!-- Assigné à -->
+      <div class="modal-field">
+        <label class="modal-label">Assigné à</label>
+        <select
+          class="modal-select"
+          [ngModel]="modalAssigneeId()"
+          (ngModelChange)="modalAssigneeId.set($event ? +$event : null); modalDirty.set(true)">
+          <option [ngValue]="null">— Personne —</option>
+          @for(member of members(); track member.id) {
+          <option [ngValue]="member.id">{{ member.name }}</option>
+          }
+        </select>
+      </div>
+
       <!-- Description -->
       <div class="modal-field">
         <label class="modal-label">Description</label>
@@ -266,13 +280,13 @@
           </textarea>
       </div>
 
-      <!-- Bouton sauvegarder (visible seulement si modifié) -->
-      @if(modalDirty()) {
+      <!-- Bouton sauvegarder -->
       <div class="modal-save-row">
-        <button class="btn-save" (click)="saveTaskModal()">Enregistrer</button>
+        <button class="btn-save" (click)="saveTaskModal()" [disabled]="!modalTitle().trim()">Enregistrer les modifications</button>
+        @if(modalDirty()) {
         <button class="btn-discard" (click)="openTaskModal(selectedTask()!)">Annuler</button>
+        }
       </div>
-      }
 
       <!-- Commentaires -->
       <div class="modal-field">

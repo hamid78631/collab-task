@@ -64,6 +64,7 @@ export class BoardView implements OnInit {
   modalTitle = signal('');
   modalDesc = signal('');
   modalPriority = signal<'HIGH' | 'MEDIUM' | 'LOW'>('MEDIUM');
+  modalAssigneeId = signal<number | null>(null);
   newCommentContent = signal('');
   modalDirty = signal(false);
 
@@ -282,6 +283,7 @@ readonly memberColors = [
     this.modalTitle.set(task.title);
     this.modalDesc.set(task.description);
     this.modalPriority.set(task.priority);
+    this.modalAssigneeId.set(task.assigneeId ?? null);
     this.newCommentContent.set('');
     this.modalDirty.set(false);
     this.taskComments.set([]);
@@ -298,7 +300,8 @@ readonly memberColors = [
       ...task,
       title: this.modalTitle().trim(),
       description: this.modalDesc(),
-      priority: this.modalPriority()
+      priority: this.modalPriority(),
+      assigneeId: this.modalAssigneeId() ?? undefined
     };
     this.taskService.updateTask(task.id!, updated).subscribe({
       next: (result) => {
@@ -398,6 +401,6 @@ readonly memberColors = [
 
   // récupérer la couleur du membre
   getMemberColor(index : number) : string {
-    return this.membersColors[index % this.memberColors.length] ;
+    return this.memberColors[index % this.memberColors.length] ;
     }
 }
