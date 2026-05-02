@@ -32,6 +32,8 @@ export class BoardView implements OnInit {
   private notificationsService = inject(NotificationsService);
   private workspaceService = inject(WorkspaceService);
 
+  currentUserInitial = (this.authService.getCurrentUserName() || 'U')[0].toUpperCase();
+
   members = signal<UserDTO[]>([]);
   board = signal<BoardDTO | null>(null);
   columns = signal<TaskColumnDTO[]>([]);
@@ -324,11 +326,17 @@ readonly memberColors = [
   addComment() {
     const content = this.newCommentContent().trim();
     if (!content) return;
-    const comment: CommentDTO = { content, taskId: this.selectedTask()!.id!, authorId: this.authService.getCurrentUserId() };
+    const task = this.selectedTask()!;
+    const userId = this.authService.getCurrentUserId();
+    const comment: CommentDTO = { content, taskId: task.id!, authorId: userId };
     this.commentService.createComment(comment).subscribe({
       next: (created) => {
         this.taskComments.set([...this.taskComments(), created]);
         this.newCommentContent.set('');
+        if (task.assigneeId && task.assigneeId !== userId) {
+          const msg = `${this.authService.getCurrentUserName()} a commenté sur la tâche : ${task.title}`;
+          this.notificationsService.createNotification(task.assigneeId, msg, 'COMMENT_ADDED', task.id).subscribe();
+        }
       },
       error: (err) => console.error('Erreur ajout commentaire', err)
     });

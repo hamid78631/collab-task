@@ -52,6 +52,10 @@
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                       <circle cx="12" cy="7" r="4"/>
                     </svg>
+                  } @else if(notif.type.toLowerCase() === 'comment_added') {
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
                   } @else {
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
                       <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -70,6 +74,13 @@
                        (click)="$event.stopPropagation(); markAsRead(notif)"
                        title="Voir le workspace">
                       Voir le workspace
+                    </a>
+                  } @else if(notif.type.toLowerCase() === 'comment_added') {
+                    <a class="notif-see-btn"
+                       [routerLink]="['/tasks']"
+                       (click)="$event.stopPropagation(); markAsRead(notif)"
+                       title="Voir la tâche">
+                      Voir la tâche
                     </a>
                   } @else if(notif.boardId) {
                     <a class="notif-see-btn"

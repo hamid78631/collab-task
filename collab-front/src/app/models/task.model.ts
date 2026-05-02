@@ -9,4 +9,5 @@ export interface TaskDTO {
   updatedAt?: string;
   position?: number;
   dueDate?: string;
+  boardId?: number;
 }

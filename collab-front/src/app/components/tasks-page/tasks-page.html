@@ -70,8 +70,19 @@
           </div>
 
           <div class="task-card-right">
-            @if(task.createdAt) {
+            @if(task.dueDate) {
+              <span class="task-date" [class.task-date--overdue]="isOverdue(task.dueDate)">
+                📅 {{ task.dueDate | date:'dd MMM yyyy' }}
+              </span>
+            } @else if(task.createdAt) {
               <span class="task-date">{{ task.createdAt | date:'dd MMM yyyy' }}</span>
+            }
+            @if(task.boardId) {
+              <a class="btn-icon" [routerLink]="['/board', task.boardId]" title="Voir le board">
+                <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                  <path d="M1 2.5A1.5 1.5 0 012.5 1h3A1.5 1.5 0 017 2.5v3A1.5 1.5 0 015.5 7h-3A1.5 1.5 0 011 5.5v-3zm8 0A1.5 1.5 0 0110.5 1h3A1.5 1.5 0 0115 2.5v3A1.5 1.5 0 0113.5 7h-3A1.5 1.5 0 019 5.5v-3zm-8 8A1.5 1.5 0 012.5 9h3A1.5 1.5 0 017 10.5v3A1.5 1.5 0 015.5 15h-3A1.5 1.5 0 011 13.5v-3zm8 0A1.5 1.5 0 0110.5 9h3a1.5 1.5 0 011.5 1.5v3a1.5 1.5 0 01-1.5 1.5h-3A1.5 1.5 0 019 13.5v-3z"/>
+                </svg>
+              </a>
             }
             <button class="btn-icon" title="Voir le détail" (click)="openDetailModal(task)">
               <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
@@ -129,11 +140,59 @@
           <option value="MEDIUM">Moyenne</option>
           <option value="HIGH">Haute</option>
         </select>
+
+        <label class="modal-field-label" style="margin-top:1rem">Date d'échéance</label>
+        <input
+          class="modal-input"
+          type="date"
+          [ngModel]="newDueDate()"
+          (ngModelChange)="newDueDate.set($event)" />
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" (click)="closeDetailModal()">Annuler</button>
         <button class="btn-confirm" (click)="saveTask()" [disabled]="!newTitle().trim()">Enregistrer</button>
       </div>
+
+      <!-- Commentaires -->
+      <div class="modal-comments">
+        <label class="modal-field-label">Commentaires</label>
+
+        <div class="comments-list">
+          @if(taskComments().length === 0) {
+            <p class="no-comments">Aucun commentaire pour l'instant.</p>
+          }
+          @for(comment of taskComments(); track comment.id) {
+            <div class="comment-item">
+              <div class="comment-avatar">{{ currentUserInitial }}</div>
+              <div class="comment-content">
+                <p class="comment-text">{{ comment.content }}</p>
+                @if(comment.createdAt) {
+                  <span class="comment-date">{{ comment.createdAt | date:'dd MMM yyyy, HH:mm' }}</span>
+                }
+              </div>
+              <button class="btn-comment-delete" (click)="deleteComment(comment.id!)">✕</button>
+            </div>
+          }
+        </div>
+
+        <div class="comment-form">
+          <textarea
+            class="comment-input"
+            placeholder="Écrire un commentaire… (Ctrl+Entrée pour envoyer)"
+            rows="2"
+            [ngModel]="newCommentContent()"
+            (ngModelChange)="newCommentContent.set($event)"
+            (keydown.control.enter)="addComment()">
+          </textarea>
+          <button
+            class="btn-comment-send"
+            (click)="addComment()"
+            [disabled]="!newCommentContent().trim()">
+            Envoyer
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 }

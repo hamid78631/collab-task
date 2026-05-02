@@ -22,6 +22,12 @@
         </svg>
         Mes boards
       </a>
+      <a class="nav-item" [routerLink]="['/tasks']">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2 2a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V2zm4.5 0a.5.5 0 000 1h3a.5.5 0 000-1h-3zM4 6.5a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm0 3a.5.5 0 01.5-.5h4a.5.5 0 010 1h-4a.5.5 0 01-.5-.5z"/>
+        </svg>
+        Mes tâches
+      </a>
     </div>
 
     <span class="sidebar-section-label">Workspaces</span>
@@ -87,6 +93,8 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
                       } @else if(notif.type.toLowerCase() === 'member_added') {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      } @else if(notif.type.toLowerCase() === 'comment_added') {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                       } @else {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
                       }
@@ -96,6 +104,8 @@
                       <span class="notif-meta">{{ notif.createdAt | date:'dd MMM · HH:mm' }}</span>
                       @if(notif.type.toLowerCase() === 'member_added') {
                         <a class="notif-link-action" [routerLink]="['/boards']" (click)="markNotifAsRead(notif); $event.stopPropagation()">Voir le workspace →</a>
+                      } @else if(notif.type.toLowerCase() === 'comment_added') {
+                        <a class="notif-link-action" [routerLink]="['/tasks']" (click)="markNotifAsRead(notif); $event.stopPropagation()">Voir la tâche →</a>
                       }
                     </div>
                     <div class="notif-unread-dot"></div>

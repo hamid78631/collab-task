@@ -54,9 +54,12 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  //Récupérer le userId courant (utilisé partout dans l'app)
   getCurrentUserId(): number {
     return Number(localStorage.getItem('userId'));
+  }
+
+  getCurrentUserName(): string {
+    return localStorage.getItem('userName') ?? '';
   }
 
   //Sauvegarder les infos de la session dans le localStorage
