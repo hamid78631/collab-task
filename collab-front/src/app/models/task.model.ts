@@ -1,3 +1,5 @@
+import { LabelDTO } from './label.model';
+
 export interface TaskDTO {
   id?: number;
   title: string;
@@ -10,4 +12,5 @@ export interface TaskDTO {
   position?: number;
   dueDate?: string;
   boardId?: number;
+  labels?: LabelDTO[];
 }

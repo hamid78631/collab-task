@@ -7,11 +7,13 @@ import { TaskService } from '../../services/task';
 import { CommentService } from '../../services/comment';
 import { AuthService } from '../../services/auth';
 import { NotificationsService } from '../../services/notifications';
+import { LabelService } from '../../services/label';
 import { BoardDTO } from '../../models/board.model';
 import { TaskColumnDTO } from '../../models/taskColumn.model';
 import { TaskDTO } from '../../models/task.model';
 import { CommentDTO } from '../../models/comment.model';
 import { NotificationDTO } from '../../models/notification.model';
+import { LabelDTO } from '../../models/label.model';
 import { WorkspaceService } from '../../services/workspace';
 import { UserDTO } from '../../models/user.model';
 
@@ -31,6 +33,7 @@ export class BoardView implements OnInit {
   private authService = inject(AuthService);
   private notificationsService = inject(NotificationsService);
   private workspaceService = inject(WorkspaceService);
+  private labelService = inject(LabelService);
 
   currentUserInitial = (this.authService.getCurrentUserName() || 'U')[0].toUpperCase();
 
@@ -69,7 +72,11 @@ export class BoardView implements OnInit {
   modalAssigneeId = signal<number | null>(null);
   newCommentContent = signal('');
   modalDirty = signal(false);
-  modalDueDate = signal('')
+  modalDueDate = signal('');
+  workspaceLabels = signal<LabelDTO[]>([]);
+  showLabelPicker = signal<boolean>(false);
+  newLabelName = signal<string>('');
+  newLabelColor = signal<string>('#6366f1');
 readonly memberColors = [
     '#4F46E5', '#0891B2', '#16A34A',
     '#DB2777', '#D97706', '#7C3AED'
@@ -294,6 +301,12 @@ readonly memberColors = [
       next: (comments) => this.taskComments.set(comments || []),
       error: () => this.taskComments.set([])
     });
+    this.showLabelPicker.set(false);
+    const workspaceId = this.board()?.workspaceId ?? Number(localStorage.getItem('workspaceId'));
+    this.labelService.getLabelsByWorkspace(workspaceId).subscribe({
+      next: (labels) => this.workspaceLabels.set(labels || []),
+      error: () => this.workspaceLabels.set([])
+    });
   }
 
   saveTaskModal() {
@@ -348,6 +361,48 @@ readonly memberColors = [
         this.taskComments.set(this.taskComments().filter(c => c.id !== commentId));
       },
       error: (err) => console.error('Erreur suppression commentaire', err)
+    });
+  }
+
+  // ── Labels ────────────────────────────────────────────────────────
+
+  isLabelOnTask(labelId: number): boolean {
+    return (this.selectedTask()?.labels ?? []).some(l => l.id === labelId);
+  }
+
+  toggleLabel(label: LabelDTO) {
+    const task = this.selectedTask()!;
+    if (this.isLabelOnTask(label.id!)) {
+      this.labelService.removeLabelFromTask(task.id!, label.id!).subscribe({
+        next: () => {
+          const updated = { ...task, labels: (task.labels ?? []).filter(l => l.id !== label.id) };
+          this.selectedTask.set(updated);
+          this.replaceTask(updated);
+        }
+      });
+    } else {
+      this.labelService.addLabelToTask(task.id!, label.id!).subscribe({
+        next: () => {
+          const updated = { ...task, labels: [...(task.labels ?? []), label] };
+          this.selectedTask.set(updated);
+          this.replaceTask(updated);
+        }
+      });
+    }
+  }
+
+  createLabel() {
+    const name = this.newLabelName().trim();
+    if (!name) return;
+    const workspaceId = this.board()?.workspaceId ?? Number(localStorage.getItem('workspaceId'));
+    const dto: LabelDTO = { name, color: this.newLabelColor(), workspaceId };
+    this.labelService.createLabel(dto).subscribe({
+      next: (created) => {
+        this.workspaceLabels.set([...this.workspaceLabels(), created]);
+        this.newLabelName.set('');
+        this.newLabelColor.set('#6366f1');
+      },
+      error: (err) => console.error('Erreur création label', err)
     });
   }
 

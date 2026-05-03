@@ -980,3 +980,137 @@
   opacity: 0.35;
   cursor: not-allowed;
 }
+
+/* ─── Labels ──────────────────────────────────────────────── */
+.task-label-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
+.label-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.label-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.label-empty {
+  font-size: 12px;
+  color: #97a0af;
+  font-style: italic;
+}
+
+.btn-label-picker {
+  margin-top: 8px;
+  padding: 5px 12px;
+  background: none;
+  border: 1.5px dashed rgba(9, 30, 66, 0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #5e6c84;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-label-picker:hover { border-color: #4F46E5; color: #4F46E5; }
+
+.label-picker {
+  margin-top: 8px;
+  border: 1.5px solid rgba(9, 30, 66, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.label-picker-empty {
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #97a0af;
+  margin: 0;
+}
+
+.label-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+  border-bottom: 1px solid rgba(9, 30, 66, 0.06);
+}
+
+.label-picker-item:last-child { border-bottom: none; }
+.label-picker-item:hover { background: #f4f5f7; }
+
+.label-picker-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.label-picker-name { flex: 1; font-size: 13px; color: #172b4d; }
+.label-picker-check { font-size: 13px; color: #4F46E5; font-weight: 700; }
+
+.label-create-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-top: 1px solid rgba(9, 30, 66, 0.08);
+}
+
+.label-color-input {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  flex-shrink: 0;
+}
+
+.label-name-input {
+  flex: 1;
+  padding: 5px 8px;
+  border: 1.5px solid rgba(9, 30, 66, 0.15);
+  border-radius: 6px;
+  font-size: 12px;
+  color: #172b4d;
+  outline: none;
+  font-family: inherit;
+}
+
+.label-name-input:focus { border-color: #4F46E5; }
+
+.label-create-btn {
+  width: 28px;
+  height: 28px;
+  background: #4F46E5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.12s;
+}
+
+.label-create-btn:hover { opacity: 0.85; }
+.label-create-btn:disabled { opacity: 0.4; cursor: not-allowed; }

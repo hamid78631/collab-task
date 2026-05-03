@@ -6,8 +6,10 @@ import { TaskService } from '../../services/task';
 import { AuthService } from '../../services/auth';
 import { CommentService } from '../../services/comment';
 import { NotificationsService } from '../../services/notifications';
+import { LabelService } from '../../services/label';
 import { TaskDTO } from '../../models/task.model';
 import { CommentDTO } from '../../models/comment.model';
+import { LabelDTO } from '../../models/label.model';
 
 @Component({
   selector: 'app-tasks-page',
@@ -21,6 +23,7 @@ export class TaskPageComponent implements OnInit {
   private authService = inject(AuthService);
   private commentService = inject(CommentService);
   private notificationsService = inject(NotificationsService);
+  private labelService = inject(LabelService);
 
   tasks = signal<TaskDTO[]>([]);
   filteredTasks = signal<TaskDTO[]>([]);
@@ -33,6 +36,10 @@ export class TaskPageComponent implements OnInit {
   selectedTask = signal<TaskDTO | null>(null);
   taskComments = signal<CommentDTO[]>([]);
   newCommentContent = signal<string>('');
+  workspaceLabels = signal<LabelDTO[]>([]);
+  showLabelPicker = signal<boolean>(false);
+  newLabelName = signal<string>('');
+  newLabelColor = signal<string>('#6366f1');
 
   newTitle = signal<string>("");
   newDescription = signal<string>("");
@@ -82,6 +89,12 @@ export class TaskPageComponent implements OnInit {
       error: () => this.taskComments.set([])
     });
     this.showDetailModal.set(true);
+    this.showLabelPicker.set(false);
+    const workspaceId = Number(localStorage.getItem('workspaceId'));
+    this.labelService.getLabelsByWorkspace(workspaceId).subscribe({
+      next: (labels) => this.workspaceLabels.set(labels || []),
+      error: () => this.workspaceLabels.set([])
+    });
   }
 
   isOverdue(dueDate: string): boolean {
@@ -129,6 +142,46 @@ export class TaskPageComponent implements OnInit {
       next: () => this.taskComments.set(this.taskComments().filter(c => c.id !== commentId)),
       error: (err) => console.error('Erreur suppression commentaire', err)
     });
+  }
+
+  createLabel() {
+    const name = this.newLabelName().trim();
+    if (!name) return;
+    const workspaceId = Number(localStorage.getItem('workspaceId'));
+    const dto: LabelDTO = { name, color: this.newLabelColor(), workspaceId };
+    this.labelService.createLabel(dto).subscribe({
+      next: (created) => {
+        this.workspaceLabels.set([...this.workspaceLabels(), created]);
+        this.newLabelName.set('');
+        this.newLabelColor.set('#6366f1');
+      },
+      error: (err) => console.error('Erreur création label', err)
+    });
+  }
+
+  isLabelOnTask(labelId: number): boolean {
+    return (this.selectedTask()?.labels ?? []).some(l => l.id === labelId);
+  }
+
+  toggleLabel(label: LabelDTO) {
+    const task = this.selectedTask()!;
+    if (this.isLabelOnTask(label.id!)) {
+      this.labelService.removeLabelFromTask(task.id!, label.id!).subscribe({
+        next: () => {
+          const updated = { ...task, labels: (task.labels ?? []).filter(l => l.id !== label.id) };
+          this.selectedTask.set(updated);
+          this.tasks.set(this.tasks().map(t => t.id === updated.id ? updated : t));
+        }
+      });
+    } else {
+      this.labelService.addLabelToTask(task.id!, label.id!).subscribe({
+        next: () => {
+          const updated = { ...task, labels: [...(task.labels ?? []), label] };
+          this.selectedTask.set(updated);
+          this.tasks.set(this.tasks().map(t => t.id === updated.id ? updated : t));
+        }
+      });
+    }
   }
 
   saveTask(){
