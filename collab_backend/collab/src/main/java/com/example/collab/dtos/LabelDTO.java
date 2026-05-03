@@ -1,8 +1,5 @@
-package com.example.collab.entities;
+package com.example.collab.dtos;
 
-
-import jakarta.persistence.*;
-import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,16 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Label {
+public class LabelDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
     private String name ;
     private String color ;
 
-    @ManyToOne
-    @JoinColumn(name = "workspace_id")
-    private Workspace workspace;
+    private Long workspaceId;
 }

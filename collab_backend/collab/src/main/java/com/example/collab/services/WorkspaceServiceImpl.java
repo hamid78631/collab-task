@@ -26,13 +26,15 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private UserRepository userRepository;
     private WorkspaceMappers dtoMapper;
     private UserMappers dtoMapperUser;
+    private NotificationService notificationService;
+
     public WorkspaceDTO saveWorkspace(WorkspaceDTO workspaceDTO) throws WorkspaceException, UserNotFoundException {
 
         if(workspaceRepository.findByName(workspaceDTO.getName()).isPresent()){
             throw new WorkspaceException("Ce workspace existé dàja !");
         }
         Workspace workspace = dtoMapper.workspaceDTOToWorkspace(workspaceDTO);
-
+        workspace.setId(null);
 
         User owner = (User) userRepository.findById(workspaceDTO.getOwnerId())
                 .orElseThrow(() -> new UserNotFoundException("Utilisateur non trouvé !"));
@@ -114,8 +116,15 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
 
         workspace.getCollaborators().add(user);
-
         workspaceRepository.save(workspace);
+
+        notificationService.createNotification(
+            userId,
+            "Vous avez été ajouté au workspace \"" + workspace.getName() + "\"",
+            "MEMBER_ADDED",
+            null,
+            workspaceId
+        );
     }
 
     public void removeMember (Long workspaceId , Long userId) throws UserNotFoundException, WorkspaceException {

@@ -37,12 +37,14 @@ public class NotificationsServiceImpl implements NotificationService{
         notificationRepository.save(notification);
     }
 
-    public void createNotification(Long userId, String message, String type) {
+    public void createNotification(Long userId, String message, String type, Long taskId, Long boardId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Notification notification = new Notification();
         notification.setOwnerNotification(user);
         notification.setMessage(message);
         notification.setType(type);
+        notification.setTaskId(taskId);
+        notification.setBoardId(boardId);
         notification.setCreatedAt(LocalDateTime.now());
         notification.setRead(false);
         notificationRepository.save(notification);

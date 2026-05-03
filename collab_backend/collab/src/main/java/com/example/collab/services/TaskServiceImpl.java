@@ -40,10 +40,13 @@ public class TaskServiceImpl implements TaskService {
             User assignee = userRepository.findById(taskDTO.getAssigneeId())
                     .orElseThrow(() -> new UserNotFoundException("User not found ! "));
             task.setAssignee(assignee);
+            Long boardId = taskColumn.getBoard() != null ? taskColumn.getBoard().getId() : null;
             notificationService.createNotification(
                     assignee.getId(),
                     "You have been assigned to task: " + task.getTitle(),
-                    "TASK_ASSIGNED"
+                    "TASK_ASSIGNED",
+                    task.getId(),
+                    boardId
             );
         }
         taskRepository.save(task);
@@ -64,14 +67,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskDTO updateTask(Long id, TaskDTO taskDTO) throws TaskException {
+    public TaskDTO updateTask(Long id, TaskDTO taskDTO) throws TaskException, UserNotFoundException {
         Task task = taskRepository.findById(id).orElseThrow(()-> new TaskException("Task not found"));
 
         task.setTitle(taskDTO.getTitle());
         task.setDescription(taskDTO.getDescription());
         task.setPosition(taskDTO.getPosition());
         task.setPriority(taskDTO.getPriority());
-        task.setDueDate(taskDTO.getDueDate());
+        task.setDueDate(taskDTO.getDueDate() != null ? taskDTO.getDueDate().atStartOfDay() : null);
+
+        if (taskDTO.getAssigneeId() != null) {
+            User assignee = userRepository.findById(taskDTO.getAssigneeId())
+                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+            task.setAssignee(assignee);
+        } else {
+            task.setAssignee(null);
+        }
 
         taskRepository.save(task);
 

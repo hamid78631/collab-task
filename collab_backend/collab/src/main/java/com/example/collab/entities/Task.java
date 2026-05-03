@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,6 +40,14 @@ public class Task {
 
     @OneToMany(mappedBy = "task",cascade = CascadeType.REMOVE)
     private List<Comment> comments ;
+
+    @ManyToMany
+    @JoinTable(
+            name = "task_labels",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
+    private List<Label> labels = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "assignee_id")

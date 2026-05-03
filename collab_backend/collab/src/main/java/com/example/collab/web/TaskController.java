@@ -37,7 +37,7 @@ public class TaskController {
     }
 
     @PutMapping("/task/{id}")
-    public TaskDTO updateTask(@PathVariable Long id ,@RequestBody TaskDTO taskDTO) throws TaskException {
+    public TaskDTO updateTask(@PathVariable Long id ,@RequestBody TaskDTO taskDTO) throws TaskException, UserNotFoundException {
         return taskService.updateTask(id , taskDTO);
     }
 
