@@ -84,6 +84,58 @@
   </div>
 </header>
 
+<!-- ─── Filtres ────────────────────────────────────────────── -->
+<div class="filters-bar">
+
+  <div class="filter-chip filter-chip--priority"
+    [class.filter-chip--high]="filterPriority() === 'HIGH'"
+    [class.filter-chip--medium]="filterPriority() === 'MEDIUM'"
+    [class.filter-chip--low]="filterPriority() === 'LOW'">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+    <select class="filter-select"
+      [ngModel]="filterPriority()"
+      (ngModelChange)="filterPriority.set($event)">
+      <option value="ALL">Priorité</option>
+      <option value="HIGH">🔴 Haute</option>
+      <option value="MEDIUM">🟠 Moyenne</option>
+      <option value="LOW">🟢 Basse</option>
+    </select>
+  </div>
+
+  <div class="filter-chip filter-chip--member"
+    [class.filter-chip--member-active]="filterAssigneeId() !== null">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <select class="filter-select"
+      [ngModel]="filterAssigneeId()"
+      (ngModelChange)="filterAssigneeId.set($event ? +$event : null)">
+      <option [ngValue]="null">Membre</option>
+      @for(member of members(); track member.id) {
+        <option [ngValue]="member.id">{{ member.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-chip filter-chip--label"
+    [class.filter-chip--label-active]="filterLabelId() !== null">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+    <select class="filter-select"
+      [ngModel]="filterLabelId()"
+      (ngModelChange)="filterLabelId.set($event ? +$event : null)">
+      <option [ngValue]="null">Label</option>
+      @for(label of workspaceLabels(); track label.id) {
+        <option [ngValue]="label.id">{{ label.name }}</option>
+      }
+    </select>
+  </div>
+
+  @if(hasActiveFilters()) {
+    <button class="filter-clear" (click)="clearFilters()">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Effacer
+    </button>
+  }
+</div>
+
 <!-- ─── Kanban ─────────────────────────────────────────────── -->
 <div class="kanban-wrapper">
   <div class="kanban">
@@ -124,7 +176,7 @@
 
       <!-- Corps : cartes tâches -->
       <div class="col-body">
-        @for(task of getColumnTasks(col.id!); track task.id) {
+        @for(task of getFilteredColumnTasks(col.id!); track task.id) {
         <div
           class="task-card"
           draggable="true"

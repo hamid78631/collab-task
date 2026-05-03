@@ -77,6 +77,11 @@ export class BoardView implements OnInit {
   showLabelPicker = signal<boolean>(false);
   newLabelName = signal<string>('');
   newLabelColor = signal<string>('#6366f1');
+
+  // Filtres
+  filterPriority = signal<string>('ALL');
+  filterAssigneeId = signal<number | null>(null);
+  filterLabelId = signal<number | null>(null);
 readonly memberColors = [
     '#4F46E5', '#0891B2', '#16A34A',
     '#DB2777', '#D97706', '#7C3AED'
@@ -94,10 +99,14 @@ readonly memberColors = [
       next: (board) => {
         this.board.set(board);
         this.workspaceService.getWorkspaceMembers(board.workspaceId).subscribe({
-          next : (members ) => this.members.set(members || []),
-          error : (err) => console.error('Erreur membres' , err)
-          })
-        },
+          next: (members) => this.members.set(members || []),
+          error: (err) => console.error('Erreur membres', err)
+        });
+        this.labelService.getLabelsByWorkspace(board.workspaceId).subscribe({
+          next: (labels) => this.workspaceLabels.set(labels || []),
+          error: () => this.workspaceLabels.set([])
+        });
+      },
       error: (err) => console.error('Erreur chargement board', err)
     });
 
@@ -420,6 +429,30 @@ readonly memberColors = [
 
   getColumnTasks(colId: number): TaskDTO[] {
     return this.tasksByColumn().get(colId) ?? [];
+  }
+
+  getFilteredColumnTasks(colId: number): TaskDTO[] {
+    let tasks = this.getColumnTasks(colId);
+    if (this.filterPriority() !== 'ALL') {
+      tasks = tasks.filter(t => t.priority === this.filterPriority());
+    }
+    if (this.filterAssigneeId() !== null) {
+      tasks = tasks.filter(t => t.assigneeId === this.filterAssigneeId());
+    }
+    if (this.filterLabelId() !== null) {
+      tasks = tasks.filter(t => (t.labels ?? []).some(l => l.id === this.filterLabelId()));
+    }
+    return tasks;
+  }
+
+  hasActiveFilters(): boolean {
+    return this.filterPriority() !== 'ALL' || this.filterAssigneeId() !== null || this.filterLabelId() !== null;
+  }
+
+  clearFilters() {
+    this.filterPriority.set('ALL');
+    this.filterAssigneeId.set(null);
+    this.filterLabelId.set(null);
   }
 
   priorityLabel(p: string): string {
