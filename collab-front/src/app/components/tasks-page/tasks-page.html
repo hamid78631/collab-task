@@ -67,6 +67,13 @@
               {{ task.priority }}
             </span>
             <span class="task-title">{{ task.title }}</span>
+            @if((task.labels ?? []).length > 0) {
+              <div class="task-card-labels">
+                @for(label of task.labels ?? []; track label.id) {
+                  <span class="task-label-badge" [style.background]="label.color">{{ label.name }}</span>
+                }
+              </div>
+            }
           </div>
 
           <div class="task-card-right">
@@ -147,6 +154,51 @@
           type="date"
           [ngModel]="newDueDate()"
           (ngModelChange)="newDueDate.set($event)" />
+
+        <!-- Labels -->
+        <label class="modal-field-label" style="margin-top:1rem">Labels</label>
+        <div class="label-badges">
+          @for(label of selectedTask()?.labels ?? []; track label.id) {
+            <span class="label-badge" [style.background]="label.color">{{ label.name }}</span>
+          }
+          @if((selectedTask()?.labels ?? []).length === 0) {
+            <span class="label-empty">Aucun label</span>
+          }
+        </div>
+        <button class="btn-label-picker" (click)="showLabelPicker.set(!showLabelPicker())">
+          + Gérer les labels
+        </button>
+        @if(showLabelPicker()) {
+          <div class="label-picker">
+            @if(workspaceLabels().length === 0) {
+              <p class="label-picker-empty">Aucun label dans ce workspace.</p>
+            }
+            @for(label of workspaceLabels(); track label.id) {
+              <div class="label-picker-item" (click)="toggleLabel(label)">
+                <span class="label-picker-dot" [style.background]="label.color"></span>
+                <span class="label-picker-name">{{ label.name }}</span>
+                @if(isLabelOnTask(label.id!)) {
+                  <span class="label-picker-check">✓</span>
+                }
+              </div>
+            }
+            <div class="label-create-form">
+              <input
+                type="color"
+                class="label-color-input"
+                [ngModel]="newLabelColor()"
+                (ngModelChange)="newLabelColor.set($event)" />
+              <input
+                type="text"
+                class="label-name-input"
+                placeholder="Nouveau label…"
+                [ngModel]="newLabelName()"
+                (ngModelChange)="newLabelName.set($event)"
+                (keydown.enter)="createLabel()" />
+              <button class="label-create-btn" (click)="createLabel()" [disabled]="!newLabelName().trim()">+</button>
+            </div>
+          </div>
+        }
       </div>
       <div class="modal-footer">
         <button class="btn-cancel" (click)="closeDetailModal()">Annuler</button>
