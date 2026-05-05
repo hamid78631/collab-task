@@ -21,6 +21,8 @@ public class Notification {
     private boolean isRead =false ;
 
     private String type;
+    private Long taskId;
+    private Long boardId;
 
     @ManyToOne
     private User ownerNotification;

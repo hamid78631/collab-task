@@ -1,16 +1,19 @@
 package com.example.collab.dtos;
 
+import com.example.collab.enums.WorkspaceRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class AuthResponse {
+@NoArgsConstructor
+public class WorkspaceMemberDTO {
 
-    private String token;
     private Long userId;
     private String name;
     private String email;
-    private Long workspaceId;
+    private String avatarUrl;
+    private WorkspaceRole role;
 
 }

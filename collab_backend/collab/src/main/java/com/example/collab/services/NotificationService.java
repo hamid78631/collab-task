@@ -14,6 +14,6 @@ public interface NotificationService {
 
     void markedRead(Long notificationId) throws NotificationExceptions;
 
-    void createNotification(Long userId, String message, String type);
+    void createNotification(Long userId, String message, String type, Long taskId, Long boardId);
 
 }

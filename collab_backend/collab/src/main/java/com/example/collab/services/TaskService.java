@@ -15,7 +15,7 @@ public interface TaskService {
 
     TaskDTO getTaskByTitle(String title) throws TaskException;
 
-    TaskDTO updateTask(Long id , TaskDTO taskDTO) throws TaskException;
+    TaskDTO updateTask(Long id , TaskDTO taskDTO) throws TaskException, UserNotFoundException;
 
     TaskDTO deleteTask(Long id) throws TaskException;
 

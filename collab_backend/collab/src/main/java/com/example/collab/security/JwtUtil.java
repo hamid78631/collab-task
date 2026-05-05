@@ -25,10 +25,10 @@ public class JwtUtil {
     // Génère un token JWT à partir de l'email de l'utilisateur
     public String generateToken(String email) {
         return Jwts.builder()
-                .setSubject(email)           // email
+                .setSubject(email)
                 .setIssuedAt(new Date())     // date de création
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION)) // date d'expiration
-                .signWith(secretKey, SignatureAlgorithm.HS256) // signature avec notre clé
+                .signWith(secretKey, SignatureAlgorithm.HS256) // signature avec ma clé
                 .compact(); // construit la chaîne finale
     }
 

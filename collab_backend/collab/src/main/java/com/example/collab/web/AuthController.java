@@ -4,7 +4,9 @@ package com.example.collab.web;
 import com.example.collab.dtos.AuthResponse;
 import com.example.collab.dtos.RegisterRequest;
 import com.example.collab.entities.User;
+import com.example.collab.entities.Workspace;
 import com.example.collab.repositories.UserRepository;
+import com.example.collab.repositories.WorkspaceRepository;
 import com.example.collab.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final UserRepository userRepository;
+    private final WorkspaceRepository workspaceRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
@@ -38,29 +40,48 @@ public class AuthController {
 
         userRepository.save(user);
 
+        // Créer un workspace par défaut pour le nouvel utilisateur
+        Workspace workspace = new Workspace();
+        workspace.setName(user.getName() + "'s Workspace");
+        workspace.setDescription("Workspace par défaut");
+        String slug = user.getName().toLowerCase()
+                .replaceAll("[^a-z0-9]", "-")
+                .replaceAll("-+", "-")
+                .replaceAll("^-|-$", "")
+                + "-" + user.getId();
+        workspace.setSlug(slug);
+        workspace.setOwner(user);
+        Workspace savedWorkspace = workspaceRepository.save(workspace);
+
         // Générer le token JWT
         String token = jwtUtil.generateToken(user.getEmail());
 
-        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getName(), user.getEmail()));
+        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getName(), user.getEmail(), savedWorkspace.getId()));
     }
 
     // POST /auth/login
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> login(@RequestBody RegisterRequest request) {
 
-        // Chercher l'utilisateur par email
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElse(null);
+        // Cas 1 : utilisateur introuvable
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(404).body("Aucun compte trouvé avec cet email");
+        }
 
-        // Si l'utilisateur n'existe pas OU le mot de passe est incorrect → 401
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).build();
+        // Cas 2 : mot de passe incorrect
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).body("Mot de passe incorrect");
         }
 
         // Générer le token JWT
         String token = jwtUtil.generateToken(user.getEmail());
 
-        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getName(), user.getEmail()));
+        // Récupérer le premier workspace de l'utilisateur
+        Long workspaceId = workspaceRepository.findByOwnerId(user.getId())
+                .stream().findFirst().map(Workspace::getId).orElse(null);
+
+        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getName(), user.getEmail(), workspaceId));
     }
 }
 

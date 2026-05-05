@@ -20,5 +20,7 @@ public class NotificationDTO {
     private boolean isRead =false ;
 
     private String type;
+    private Long taskId;
+    private Long boardId;
     private Long ownerNotification;
 }

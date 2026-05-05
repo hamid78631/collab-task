@@ -25,4 +25,13 @@ public class NotificationController {
     public void markedRead(@PathVariable Long notificationId) throws NotificationExceptions {
         notificationService.markedRead(notificationId);
     }
+
+    @PostMapping("/notifications/save/{userId}")
+    public void createNotification(@PathVariable Long userId,
+                                   @RequestParam String message,
+                                   @RequestParam String type,
+                                   @RequestParam(required = false) Long taskId,
+                                   @RequestParam(required = false) Long boardId) {
+        notificationService.createNotification(userId, message, type, taskId, boardId);
+    }
 }

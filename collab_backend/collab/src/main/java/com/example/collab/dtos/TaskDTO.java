@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -25,10 +27,11 @@ public class TaskDTO {
     private Integer position ;
 
     private LocalDateTime createdAt ;
-    //Peut être dueDate aussi
-    private LocalDateTime dueDate ;
+    private LocalDate dueDate ;
 
 
     private Long taskColumnId;
     private Long assigneeId ;
+    private Long boardId ;
+    private List<LabelDTO> labels ;
 }
