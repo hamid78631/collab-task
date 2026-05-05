@@ -29,12 +29,7 @@ public class Workspace {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    @ManyToMany
-    @JoinTable(
-            name = "workspace_members",
-            joinColumns = @JoinColumn(name = "workspace_id"),
-            inverseJoinColumns = @JoinColumn(name = "member_id")
-    )
+    @OneToMany(mappedBy = "workspace" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> collaborators = new ArrayList<>();
 
     @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)

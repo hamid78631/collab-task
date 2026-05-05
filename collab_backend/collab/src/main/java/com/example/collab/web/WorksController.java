@@ -1,10 +1,11 @@
 package com.example.collab.web;
 
-import com.example.collab.dtos.UserDTO;
 import com.example.collab.dtos.WorkspaceDTO;
+import com.example.collab.dtos.WorkspaceMemberDTO;
+import com.example.collab.enums.WorkspaceRole;
 import com.example.collab.exceptions.UserNotFoundException;
 import com.example.collab.exceptions.WorkspaceException;
-import com.example.collab.services.WorkspaceService;
+import com.example.collab.services.WorkspaceMemberService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,56 +18,62 @@ import java.util.List;
 @RequestMapping("/api")
 public class WorksController {
 
-    private WorkspaceService workspaceService;
+    private WorkspaceMemberService workspaceMemberService;
 
     @GetMapping("/workspaces")
-    public List<WorkspaceDTO> getWorkspaces(){
-
-        return workspaceService.getAllWorkspaces();
+    public List<WorkspaceDTO> getWorkspaces() {
+        return workspaceMemberService.getAllWorkspaces();
     }
+
     @GetMapping("/workspaces/{id}")
     public WorkspaceDTO getWorkspaceById(@PathVariable Long id) throws WorkspaceException {
-        return workspaceService.getWorkspaceById(id);
+        return workspaceMemberService.getWorkspaceById(id);
     }
 
     @GetMapping("/workspaces/slug/{slug}")
     public WorkspaceDTO getWorkspace(@PathVariable String slug) throws WorkspaceException {
-        return workspaceService.getWorkspaceBySlug(slug );
+        return workspaceMemberService.getWorkspaceBySlug(slug);
     }
 
     @PostMapping("/workspaces")
     public WorkspaceDTO createWorkspace(@RequestBody WorkspaceDTO workspaceDTO) throws WorkspaceException, UserNotFoundException {
-
-        return workspaceService.saveWorkspace( workspaceDTO);
+        return workspaceMemberService.saveWorkspace(workspaceDTO);
     }
 
     @PutMapping("/workspaces/{id}")
-    public WorkspaceDTO updateWorkspace(@RequestBody WorkspaceDTO workspaceDTO , @PathVariable Long id) throws WorkspaceException, UserNotFoundException {
-
-        return workspaceService.updateWorkspace(workspaceDTO , id);
+    public WorkspaceDTO updateWorkspace(@RequestBody WorkspaceDTO workspaceDTO, @PathVariable Long id) throws WorkspaceException, UserNotFoundException {
+        return workspaceMemberService.updateWorkspace(workspaceDTO, id);
     }
 
     @DeleteMapping("/workspaces/{id}")
-    public WorkspaceDTO deleteWorkspace(@PathVariable Long id) throws WorkspaceException, UserNotFoundException {
-        return workspaceService.deleteWorkspace(id);
+    public WorkspaceDTO deleteWorkspace(@PathVariable Long id) throws WorkspaceException {
+        return workspaceMemberService.deleteWorkspace(id);
     }
 
     @PostMapping("/workspaces/{workspaceId}/collaborators/{userId}")
-    public void addMember(@PathVariable Long workspaceId ,@PathVariable Long userId) throws UserNotFoundException, WorkspaceException {
-        workspaceService.addMember(workspaceId , userId);
+    public void addMember(@PathVariable Long workspaceId, @PathVariable Long userId) throws UserNotFoundException, WorkspaceException {
+        workspaceMemberService.addMember(workspaceId, userId);
     }
+
     @DeleteMapping("/workspaces/{workspaceId}/collaborators/{userId}")
-    public void removeMember( @PathVariable Long workspaceId , @PathVariable Long userId) throws UserNotFoundException, WorkspaceException {
-        workspaceService.removeMember(workspaceId , userId);
+    public void removeMember(@PathVariable Long workspaceId, @PathVariable Long userId) throws UserNotFoundException, WorkspaceException {
+        workspaceMemberService.removeMember(workspaceId, userId);
     }
 
     @GetMapping("/workspaces/{id}/members")
-    public List<UserDTO> getMembers(@PathVariable Long id) throws WorkspaceException {
-        return workspaceService.getWorkspaceMembers(id);
+    public List<WorkspaceMemberDTO> getMembers(@PathVariable Long id) throws WorkspaceException {
+        return workspaceMemberService.getWorkspaceMembers(id);
     }
 
     @GetMapping("/workspaces/user/{userId}")
     public List<WorkspaceDTO> getWorkspacesByUser(@PathVariable Long userId) throws WorkspaceException {
-        return workspaceService.getWorkspacesByUser(userId);
+        return workspaceMemberService.getWorkspacesByUser(userId);
+    }
+
+    @PutMapping("/workspaces/{workspaceId}/members/{userId}/role")
+    public void changeRole(@PathVariable Long workspaceId,
+                           @PathVariable Long userId,
+                           @RequestParam String role) throws UserNotFoundException, WorkspaceException {
+        workspaceMemberService.changeRole(workspaceId, userId, WorkspaceRole.valueOf(role));
     }
 }
