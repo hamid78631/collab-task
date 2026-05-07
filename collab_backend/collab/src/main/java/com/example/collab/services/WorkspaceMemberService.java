@@ -16,7 +16,7 @@ public interface WorkspaceMemberService {
     WorkspaceDTO getWorkspaceById(Long id) throws WorkspaceException;
     WorkspaceDTO updateWorkspace(WorkspaceDTO workspaceDTO, Long id) throws WorkspaceException, UserNotFoundException;
     WorkspaceDTO saveWorkspace(WorkspaceDTO workspaceDTO) throws WorkspaceException, UserNotFoundException;
-    WorkspaceDTO deleteWorkspace(Long id) throws WorkspaceException;
+    WorkspaceDTO deleteWorkspace(Long id) throws WorkspaceException, UserNotFoundException;
     void addMember(Long workspaceId, Long userId) throws UserNotFoundException, WorkspaceException;
     void removeMember(Long workspaceId, Long userId) throws UserNotFoundException, WorkspaceException;
     List<WorkspaceMemberDTO> getWorkspaceMembers(Long workspaceId) throws WorkspaceException;

@@ -5,7 +5,10 @@ import com.example.collab.dtos.AuthResponse;
 import com.example.collab.dtos.RegisterRequest;
 import com.example.collab.entities.User;
 import com.example.collab.entities.Workspace;
+import com.example.collab.entities.WorkspaceMember;
+import com.example.collab.enums.WorkspaceRole;
 import com.example.collab.repositories.UserRepository;
+import com.example.collab.repositories.WorkspaceMemberRepository;
 import com.example.collab.repositories.WorkspaceRepository;
 import com.example.collab.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final WorkspaceRepository workspaceRepository;
+    private final WorkspaceMemberRepository workspaceMemberRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
@@ -52,6 +56,12 @@ public class AuthController {
         workspace.setSlug(slug);
         workspace.setOwner(user);
         Workspace savedWorkspace = workspaceRepository.save(workspace);
+
+        WorkspaceMember ownerMember = new WorkspaceMember();
+        ownerMember.setWorkspace(savedWorkspace);
+        ownerMember.setUser(user);
+        ownerMember.setRole(WorkspaceRole.OWNER);
+        workspaceMemberRepository.save(ownerMember);
 
         // Générer le token JWT
         String token = jwtUtil.generateToken(user.getEmail());

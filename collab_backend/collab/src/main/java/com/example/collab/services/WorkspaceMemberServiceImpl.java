@@ -15,8 +15,11 @@ import com.example.collab.repositories.WorkspaceRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.Arrays;
 import java.util.List;
+
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -68,6 +71,7 @@ public class WorkspaceMemberServiceImpl implements WorkspaceMemberService{
         }
 
         Workspace workspace = workspaceMappers.workspaceDTOToWorkspace(workspaceDTO);
+        workspace.setId(null);
 
         User owner = userRepository.findById(workspaceDTO.getOwnerId())
                 .orElseThrow(() -> new UserNotFoundException("Utilisateur non trouvé !"));
@@ -93,7 +97,8 @@ public class WorkspaceMemberServiceImpl implements WorkspaceMemberService{
     }
 
     @Override
-    public WorkspaceDTO deleteWorkspace(Long id) throws WorkspaceException {
+    public WorkspaceDTO deleteWorkspace(Long id) throws WorkspaceException, UserNotFoundException {
+        requireRole(id, WorkspaceRole.OWNER);
         Workspace workspace = workspaceRepository.findById(id)
                 .orElseThrow(() -> new WorkspaceException("Ce workspace n'existe pas !"));
         workspaceRepository.delete(workspace);
@@ -102,6 +107,8 @@ public class WorkspaceMemberServiceImpl implements WorkspaceMemberService{
 
     @Override
     public void addMember(Long workspaceId, Long userId) throws UserNotFoundException, WorkspaceException {
+        requireRole(workspaceId, WorkspaceRole.OWNER , WorkspaceRole.ADMIN);
+
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new WorkspaceException("Ce workspace n'existe pas !"));
         User user = userRepository.findById(userId)
@@ -121,6 +128,7 @@ public class WorkspaceMemberServiceImpl implements WorkspaceMemberService{
 
     @Override
     public void removeMember(Long workspaceId, Long userId) throws UserNotFoundException, WorkspaceException {
+        requireRole(workspaceId, WorkspaceRole.OWNER , WorkspaceRole.ADMIN);
         WorkspaceMember member = workspaceMemberRepository
                 .findByWorkspaceIdAndUserId(workspaceId, userId)
                 .orElseThrow(() -> new WorkspaceException("Cet utilisateur ne fait pas partie du workspace !"));
@@ -150,12 +158,18 @@ public class WorkspaceMemberServiceImpl implements WorkspaceMemberService{
     @Override
     public List<WorkspaceDTO> getWorkspacesByUser(Long userId) throws WorkspaceException {
         return workspaceMemberRepository.findByUserId(userId).stream()
-                .map(m -> workspaceMappers.workspaceToWorkspaceDTO(m.getWorkspace()))
+                .map(m -> {
+                    WorkspaceDTO dto = workspaceMappers.workspaceToWorkspaceDTO(m.getWorkspace());
+                    dto.setMyRole(m.getRole().name());
+                    return dto;
+                })
+
                 .toList();
     }
 
     @Override
     public void changeRole(Long workspaceId, Long userId, WorkspaceRole newRole) throws UserNotFoundException, WorkspaceException {
+        requireRole(workspaceId, WorkspaceRole.OWNER);
         WorkspaceMember member = workspaceMemberRepository
                 .findByWorkspaceIdAndUserId(workspaceId, userId)
                 .orElseThrow(() -> new WorkspaceException("Cet utilisateur ne fait pas partie du workspace !"));
@@ -166,4 +180,16 @@ public class WorkspaceMemberServiceImpl implements WorkspaceMemberService{
         member.setRole(newRole);
         workspaceMemberRepository.save(member);
     }
+
+    private void requireRole(Long workspaceId, WorkspaceRole... allowed) throws WorkspaceException, UserNotFoundException {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Utilisateur non trouvé !"));
+        WorkspaceMember member = workspaceMemberRepository
+                .findByWorkspaceIdAndUserId(workspaceId, user.getId())
+                .orElseThrow(() -> new WorkspaceException("Vous n'êtes pas membre de ce workspace !"));
+        if (!Arrays.asList(allowed).contains(member.getRole()))
+            throw new WorkspaceException("Vous n'avez pas les droits nécessaires !");
+    }
+
 }

@@ -15,7 +15,7 @@ import { CommentDTO } from '../../models/comment.model';
 import { NotificationDTO } from '../../models/notification.model';
 import { LabelDTO } from '../../models/label.model';
 import { WorkspaceService } from '../../services/workspace';
-import { UserDTO } from '../../models/user.model';
+import { WorkspaceMemberDTO } from '../../models/workspace.model';
 
 @Component({
   selector: 'app-board-view',
@@ -37,7 +37,7 @@ export class BoardView implements OnInit {
 
   currentUserInitial = (this.authService.getCurrentUserName() || 'U')[0].toUpperCase();
 
-  members = signal<UserDTO[]>([]);
+  members = signal<WorkspaceMemberDTO[]>([]);
   board = signal<BoardDTO | null>(null);
   columns = signal<TaskColumnDTO[]>([]);
   tasksByColumn = signal<Map<number, TaskDTO[]>>(new Map());
@@ -82,6 +82,10 @@ export class BoardView implements OnInit {
   filterPriority = signal<string>('ALL');
   filterAssigneeId = signal<number | null>(null);
   filterLabelId = signal<number | null>(null);
+
+  //Vue liste board-view
+  viewMode = signal<'kanban' |'list'>('kanban');
+
 readonly memberColors = [
     '#4F46E5', '#0891B2', '#16A34A',
     '#DB2777', '#D97706', '#7C3AED'
@@ -455,6 +459,18 @@ readonly memberColors = [
     this.filterLabelId.set(null);
   }
 
+  getAllFilteredTasks(): { task: TaskDTO; colName: string; colId: number }[] {
+    const result: { task: TaskDTO; colName: string; colId: number }[] = [];
+    for (const col of this.columns()) {
+      for (const task of this.getFilteredColumnTasks(col.id!)) {
+        result.push({ task, colName: col.name, colId: col.id! });
+      }
+    }
+    return result;
+  }
+
+
+
   priorityLabel(p: string): string {
     return p === 'HIGH' ? 'Haute' : p === 'MEDIUM' ? 'Moyenne' : 'Basse';
   }
@@ -502,8 +518,8 @@ readonly memberColors = [
     const colors = ['#4F46E5', '#0891B2', '#16A34A', '#D97706', '#DC2626', '#7C3AED'];
     return colors[assigneeId % colors.length];
   }
- getMemberByAssigneeId(assigneeId: number): UserDTO | undefined {
-    return this.members().find(m => m.id === assigneeId);
+ getMemberByAssigneeId(assigneeId: number): WorkspaceMemberDTO | undefined {
+    return this.members().find(m => m.userId === assigneeId);
   }
 
   // récupérer la couleur du membre

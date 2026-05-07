@@ -15,6 +15,7 @@
     // On clone la requête en ajoutant le header Authorization
     const requestWithToken = req.clone({
       setHeaders: {
+
         Authorization: `Bearer ${token}`
       }
     });

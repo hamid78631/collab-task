@@ -72,7 +72,7 @@
     </div>
 
     <div class="avatar-stack">
-      @for(member of members() ; track member.id; let i = $index) {
+      @for(member of members() ; track member.userId; let i = $index) {
         <div class="avatar-sm" [style.background]="getMemberColor(i)" [title] = "member.name">
           {{member.name.charAt(0).toUpperCase()}}
         </div>
@@ -109,8 +109,8 @@
       [ngModel]="filterAssigneeId()"
       (ngModelChange)="filterAssigneeId.set($event ? +$event : null)">
       <option [ngValue]="null">Membre</option>
-      @for(member of members(); track member.id) {
-        <option [ngValue]="member.id">{{ member.name }}</option>
+      @for(member of members(); track member.userId) {
+        <option [ngValue]="member.userId">{{ member.name }}</option>
       }
     </select>
   </div>
@@ -134,9 +134,25 @@
       Effacer
     </button>
   }
+  <div class="view-toggle">
+    <button class="view-btn" [class.view-btn--active]="viewMode() === 'kanban'" (click)="viewMode.set('kanban')" title="Vue Kanban">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3"
+                                                                                                                                      width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+
+      Kanban
+    </button>
+    <button class="view-btn" [class.view-btn--active]="viewMode() === 'list'" (click)="viewMode.set('list')" title="Vue Liste">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6"
+                                                                                                                                      x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3"
+                                                                                                                                                                                                                                                                              y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Liste
+    </button>
+  </div>
+
 </div>
 
 <!-- ─── Kanban ─────────────────────────────────────────────── -->
+@if(viewMode() === 'kanban') {
 <div class="kanban-wrapper">
   <div class="kanban">
 
@@ -280,6 +296,58 @@
 
   </div>
 </div>
+}
+
+<!-- ─── Vue Liste ──────────────────────────────────────────── -->
+@if(viewMode() === 'list') {
+<div class="list-view">
+  <table class="list-table">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Statut</th>
+        <th>Priorité</th>
+        <th>Assigné</th>
+        <th>Échéance</th>
+        <th>Labels</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(row of getAllFilteredTasks(); track row.task.id) {
+        <tr class="list-row" (click)="openTaskModal(row.task)">
+          <td class="list-cell list-cell--title">{{ row.task.title }}</td>
+          <td class="list-cell">
+            <span class="status-chip" [style.background]="getColumnColor(row.colId)">{{ row.colName }}</span>
+          </td>
+          <td class="list-cell">
+            <span class="priority-badge priority-{{ row.task.priority.toLowerCase() }}">{{ priorityLabel(row.task.priority) }}</span>
+          </td>
+          <td class="list-cell">
+            @if(row.task.assigneeId) {
+              <div class="mini-av" [style.background]="getAssigneeColor(row.task.assigneeId)" [title]="getMemberByAssigneeId(row.task.assigneeId)?.name ?? ''">
+                {{ getMemberByAssigneeId(row.task.assigneeId)?.name?.charAt(0)?.toUpperCase() ?? '?' }}
+              </div>
+            } @else {
+              <span class="list-empty">—</span>
+            }
+          </td>
+          <td class="list-cell" [class.list-cell--overdue]="row.task.dueDate != null && row.task.dueDate < today()">
+            {{ row.task.dueDate ? formatDueDate(row.task.dueDate) : '—' }}
+          </td>
+          <td class="list-cell list-cell--labels">
+            @for(label of (row.task.labels ?? []); track label.id) {
+              <span class="task-label-badge" [style.background]="label.color">{{ label.name }}</span>
+            }
+          </td>
+        </tr>
+      }
+      @if(getAllFilteredTasks().length === 0) {
+        <tr><td colspan="6" class="list-empty-row">Aucune tâche</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
+}
 
 <!-- Modal Détail Tâche-->
 @if(selectedTask()) {
@@ -325,9 +393,9 @@
           class="modal-select"
           [ngModel]="modalAssigneeId()"
           (ngModelChange)="modalAssigneeId.set($event ? +$event : null); modalDirty.set(true)">
-          <option [ngValue]="null">— Personne —</option>
-          @for(member of members(); track member.id) {
-          <option [ngValue]="member.id">{{ member.name }}</option>
+          <option [ngValue]="null"> Personne </option>
+          @for(member of members(); track member.userId) {
+          <option [ngValue]="member.userId">{{ member.name }}</option>
           }
         </select>
       </div>

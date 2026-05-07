@@ -23,7 +23,7 @@ public class WorkspaceDTO {
     private String slug ;
 
     private Long ownerId ;
-
+    private String myRole ;
    // private String ownerName;
 
 }

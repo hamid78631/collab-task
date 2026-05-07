@@ -46,16 +46,16 @@ public class WorksController {
     }
 
     @DeleteMapping("/workspaces/{id}")
-    public WorkspaceDTO deleteWorkspace(@PathVariable Long id) throws WorkspaceException {
+    public WorkspaceDTO deleteWorkspace(@PathVariable Long id) throws WorkspaceException, UserNotFoundException {
         return workspaceMemberService.deleteWorkspace(id);
     }
 
-    @PostMapping("/workspaces/{workspaceId}/collaborators/{userId}")
+    @PostMapping("/workspaces/{workspaceId}/members/{userId}")
     public void addMember(@PathVariable Long workspaceId, @PathVariable Long userId) throws UserNotFoundException, WorkspaceException {
         workspaceMemberService.addMember(workspaceId, userId);
     }
 
-    @DeleteMapping("/workspaces/{workspaceId}/collaborators/{userId}")
+    @DeleteMapping("/workspaces/{workspaceId}/members/{userId}")
     public void removeMember(@PathVariable Long workspaceId, @PathVariable Long userId) throws UserNotFoundException, WorkspaceException {
         workspaceMemberService.removeMember(workspaceId, userId);
     }

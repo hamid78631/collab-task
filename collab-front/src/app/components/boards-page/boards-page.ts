@@ -7,7 +7,7 @@ import { WorkspaceService } from '../../services/workspace';
 import { AuthService } from '../../services/auth';
 import { NotificationsService } from '../../services/notifications';
 import { BoardDTO } from '../../models/board.model';
-import { WorkspaceDTO } from '../../models/workspace.model';
+import { WorkspaceDTO, WorkspaceMemberDTO } from '../../models/workspace.model';
 import { NotificationDTO } from '../../models/notification.model';
 import { UserDTO } from '../../models/user.model';
 import { UserService } from '../../services/user';
@@ -28,6 +28,8 @@ export class BoardsPageComponent implements OnInit {
   workspaces = signal<WorkspaceDTO[]>([]);
   boardsByWorkspace = signal<Map<number, BoardDTO[]>>(new Map());
 
+  toastMessage = signal<string | null>(null);
+  toastType = signal<'error' | 'success'>('error');
 
   // Menu contextuel par carte
   activeMenuBoardId = signal<number | null>(null);
@@ -62,7 +64,7 @@ export class BoardsPageComponent implements OnInit {
 //modal members
 showMembersModal = signal(false);
 membersWorkspaceId = signal<number | null>(null);
-members = signal<UserDTO[]>([]);
+members = signal<WorkspaceMemberDTO[]>([]);
 
 memberSearchQuery = signal('');
 memberSearchResults = signal<UserDTO[]>([]);
@@ -178,7 +180,7 @@ memberSearchResults = signal<UserDTO[]>([]);
           this.boardsByWorkspace.set(map);
           this.closeBoardModal();
         },
-        error: (err) => console.error('Erreur création board', err)
+        error: (err) => { this.closeBoardModal(); this.toastError(err); }
       });
     } else {
       const boardId = this.modalBoardId()!;
@@ -195,7 +197,7 @@ memberSearchResults = signal<UserDTO[]>([]);
           this.replaceBoard(result);
           this.closeBoardModal();
         },
-        error: (err) => console.error('Erreur mise à jour board', err)
+        error: (err) => { this.closeBoardModal(); this.toastError(err); }
       });
     }
   }
@@ -212,7 +214,7 @@ memberSearchResults = signal<UserDTO[]>([]);
         this.replaceBoard(updated);
         this.closeMenu();
       },
-      error: (err) => console.error('Erreur changement couleur', err)
+      error: (err) => this.toastError(err)
     });
   }
 
@@ -234,7 +236,7 @@ memberSearchResults = signal<UserDTO[]>([]);
         this.boardsByWorkspace.set(map);
         this.confirmDeleteBoardId.set(null);
       },
-      error: (err) => console.error('Erreur suppression board', err)
+      error: (err) => { this.confirmDeleteBoardId.set(null); this.toastError(err); }
     });
   }
 
@@ -297,7 +299,7 @@ memberSearchResults = signal<UserDTO[]>([]);
         });
         this.closeWorkspaceModal();
       },
-      error: (err) => console.error('Erreur création workspace', err)
+      error: (err) => { this.closeWorkspaceModal(); this.toastError(err); }
     });
   }
 
@@ -326,7 +328,7 @@ memberSearchResults = signal<UserDTO[]>([]);
     }
     this.userService.searchUser(query, query).subscribe({
       next: (users) => {
-        const memberIds = new Set(this.members().map(m => m.id));
+        const memberIds = new Set(this.members().map(m => m.userId));
         this.memberSearchResults.set((users || []).filter(u => !memberIds.has(u.id)));
       },
       error: (err) => console.error('Erreur recherche utilisateurs', err)
@@ -339,19 +341,44 @@ memberSearchResults = signal<UserDTO[]>([]);
       next: () => {
         const user = this.memberSearchResults().find(u => u.id === userId);
         if (user) {
-          this.members.update(list => [...list, user]);
+          const newMember: WorkspaceMemberDTO = { userId: user.id!, name: user.name, email: user.email, avatarUrl: user.avatarUrl, role: 'MEMBER' };
+          this.members.update(list => [...list, newMember]);
           this.memberSearchResults.update(list => list.filter(u => u.id !== userId));
         }
       },
-      error: (err) => console.error('Erreur ajout membre', err)
+      error: (err) => this.toastError(err)
     });
   }
 
   removeMember(userId: number) {
     const wsId = this.membersWorkspaceId()!;
     this.workspaceService.removeMemberFromWorkspace(wsId, userId).subscribe({
-      next: () => this.members.update(list => list.filter(m => m.id !== userId)),
-      error: (err) => console.error('Erreur retrait membre', err)
+      next: () => this.members.update(list => list.filter(m => m.userId !== userId)),
+      error: (err) => this.toastError(err)
     });
+  }
+
+
+  private showToast(message: string, type: 'error' | 'success' = 'error') {
+    this.toastMessage.set(message);
+    this.toastType.set(type);
+    setTimeout(() => this.toastMessage.set(null), 4000);
+  }
+
+  private toastError(err: any) {
+    const msg = err?.error?.message || 'Vous ne pouvez faire cette action ! ';
+    this.showToast(msg, 'error');
+  }
+
+  canManage(ws: WorkspaceDTO | undefined): boolean {
+    return ws?.myRole === 'OWNER' || ws?.myRole === 'ADMIN';
+  }
+
+  isOwnerOf(ws: WorkspaceDTO): boolean {
+    return ws.myRole === 'OWNER';
+  }
+
+  getMembersWorkspace(): WorkspaceDTO | undefined {
+    return this.workspaces().find(ws => ws.id === this.membersWorkspaceId());
   }
 }

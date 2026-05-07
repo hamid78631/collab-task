@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { WorkspaceDTO } from '../models/workspace.model';
-import { UserDTO } from '../models/user.model';
+import { WorkspaceDTO, WorkspaceMemberDTO, WorkspaceRole } from '../models/workspace.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,18 +41,19 @@ export class WorkspaceService {
     return this.httpClient.delete<void>(`${this.apiUrl}/workspaces/${id}`);
   }
 
-  // Ajouter un membre (on utilise UserDTO pour les membres)
   addMemberToWorkspace(workspaceId: number, userId: number): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/workspaces/${workspaceId}/collaborators/${userId}`, {});
+    return this.httpClient.post(`${this.apiUrl}/workspaces/${workspaceId}/members/${userId}`, {});
   }
 
-  // Supprimer un membre
   removeMemberFromWorkspace(workspaceId: number, userId: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.apiUrl}/workspaces/${workspaceId}/collaborators/${userId}`);
+    return this.httpClient.delete<void>(`${this.apiUrl}/workspaces/${workspaceId}/members/${userId}`);
   }
 
-  // Récupérer les membres
-  getWorkspaceMembers(workspaceId: number): Observable<UserDTO[]> {
-    return this.httpClient.get<UserDTO[]>(`${this.apiUrl}/workspaces/${workspaceId}/members`);
+  getWorkspaceMembers(workspaceId: number): Observable<WorkspaceMemberDTO[]> {
+    return this.httpClient.get<WorkspaceMemberDTO[]>(`${this.apiUrl}/workspaces/${workspaceId}/members`);
+  }
+
+  changeRole(workspaceId: number, userId: number, role: WorkspaceRole): Observable<void> {
+    return this.httpClient.put<void>(`${this.apiUrl}/workspaces/${workspaceId}/members/${userId}/role?role=${role}`, {});
   }
 }
