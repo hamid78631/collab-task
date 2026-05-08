@@ -139,12 +139,10 @@
   pointer-events: none;
 }
 
-/* ── Wrapper position relative pour le dropdown ── */
 .notif-wrapper {
   position: relative;
 }
 
-/* ── Dropdown ── */
 .notif-dropdown {
   position: absolute;
   top: calc(100% + 10px);
@@ -207,7 +205,6 @@
 }
 
 .notif-item:last-child { border-bottom: none; }
-
 .notif-item:hover { background: var(--gray-50); }
 
 .notif-icon {

@@ -73,7 +73,7 @@
 .nav-item:hover { background: #f4f5f7; color: #172b4d; }
 
 .nav-item.active {
-  background: #EEF2FF;
+  background: #F5F3FF;
   color: #4F46E5;
   font-weight: 600;
 }
@@ -194,7 +194,7 @@
 }
 
 .card--confirm {
-  border-color: rgba(79, 70, 229, 0.2);
+  border-color: rgba(124, 58, 237, 0.2);
 }
 
 .card-title {

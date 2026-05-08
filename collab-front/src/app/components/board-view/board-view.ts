@@ -84,7 +84,9 @@ export class BoardView implements OnInit {
   filterLabelId = signal<number | null>(null);
 
   //Vue liste board-view
-  viewMode = signal<'kanban' |'list'>('kanban');
+  viewMode = signal<'kanban' |'list' | 'calendar'>('kanban');
+  calendarYear = signal<number>(new Date().getFullYear());
+  calendarMonth = signal<number>(new Date().getMonth());
 
 readonly memberColors = [
     '#4F46E5', '#0891B2', '#16A34A',
@@ -469,10 +471,57 @@ readonly memberColors = [
     return result;
   }
 
+  prevMonth() {
+    if (this.calendarMonth() === 0) {
+      this.calendarMonth.set(11);
+      this.calendarYear.set(this.calendarYear() - 1);
+    } else {
+      this.calendarMonth.set(this.calendarMonth() - 1);
+    }
+  }
+
+  nextMonth() {
+    if (this.calendarMonth() === 11) {
+      this.calendarMonth.set(0);
+      this.calendarYear.set(this.calendarYear() + 1);
+    } else {
+      this.calendarMonth.set(this.calendarMonth() + 1);
+    }
+  }
+
+  getCalendarDays(): { date: Date; tasks: TaskDTO[] }[] {
+    const year = this.calendarYear();
+    const month = this.calendarMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+
+    const startOffset = (firstDay.getDay() + 6) % 7;
+    const allTasks = this.getAllFilteredTasks().map(r => r.task);
+    const days: { date: Date; tasks: TaskDTO[] }[] = [];
+
+    for (let i = 0; i < startOffset; i++) {
+      days.push({ date: new Date(year, month, 1 - startOffset + i), tasks: [] });
+    }
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      const date = new Date(year, month, d);
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const tasks = allTasks.filter(t => t.dueDate === dateStr);
+      days.push({ date, tasks });
+    }
+    while (days.length % 7 !== 0) {
+      days.push({ date: new Date(year, month + 1, days.length - lastDay.getDate() - startOffset + 1), tasks: [] });
+    }
+    return days;
+  }
+calendarMonthLabel(): string {
+    return new Date(this.calendarYear(), this.calendarMonth(), 1)
+      .toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+  }
+
 
 
   priorityLabel(p: string): string {
-    return p === 'HIGH' ? 'Haute' : p === 'MEDIUM' ? 'Moyenne' : 'Basse';
+    return p === 'HIGH' ? 'Haute' : p === 'MEDIUM' ? 'Moyenn  e' : 'Basse';
   }
 
   formatDate(dateStr?: string): string {

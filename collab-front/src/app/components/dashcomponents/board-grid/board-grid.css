@@ -23,7 +23,6 @@
   --ease:     cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── SECTION HEADER ── */
 .sec-hd {
   display: flex;
   align-items: center;
@@ -81,7 +80,6 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
-/* ── GRID ── */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -90,7 +88,6 @@
 
 .grid.list-view { grid-template-columns: 1fr; }
 
-/* ── BOARD CARD ── */
 .bcard {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -181,7 +178,6 @@
   background: #fffbeb;
 }
 
-/* ── CARD FOOTER ── */
 .bfoot {
   padding: 10px 16px;
   border-top: 1px solid var(--border);
@@ -231,7 +227,6 @@
   box-shadow: 0 3px 8px rgba(37,99,235,0.22);
 }
 
-/* ── ADD CARD ── */
 .addcard {
   background: var(--surface);
   border: 1.5px dashed var(--gray-300);

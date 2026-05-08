@@ -1,0 +1,3 @@
+# CollabTask
+
+CollabTask is a full-stack project management application inspired by Trello and Jira. It lets teams organize work across multiple workspaces and boards using Kanban and list views. Features include task creation with assignees, due dates, labels, and comments, as well as workspace member management with role-based permissions. Built with Angular (frontend) and Spring Boot (backend), it provides a clean, real-time collaborative environment for tracking tasks from backlog to done.
